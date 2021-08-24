@@ -1,0 +1,113 @@
+\chapter{Introdução}
+
+\section{Apresentação}
+
+Esta apostila são notas de aula do curso ministrado por mim no segundo semestre de 2021 para as duas turmas noturnas de Sistemas de Informação.
+Seu conteúdo está baseado nos livros que servem de bibliografia para o curso:
+
+\nocite{sedgewick01,sedgewick11,cormen12}
+
+
+\printbibliography[heading=none,keyword={bibliografia}]
+
+%\begin{thebibliography}
+%\bibitem{sedgewick11}
+%\bibitem{sedgewick01}
+%\bibitem{cormen12}
+%\end{thebibliography}
+
+  Além dos livros serviu de material para elaboração dessas notas outros textos citados ao longo do curso bem como as gravações dos cursos do professor Robert Sedgeweick para o Coursera e do professor Ronald Rivest para o MIT.
+
+  
+
+\section{Algoritmos}
+
+Um {\em problema computacional} é a especificação de uma relação desejada entre um certo {\em valor de entrada} escolhido em um conjunto de valores válidos e o {\em valor de saída} esperado.
+
+\begin{example}
+  {\bf Problema da busca}\\
+
+  {\bf Entrada:} Uma sequência de $n \in \mathbb{N}$ valores $\langle a_1, \dots, a_n \rangle$ em que $a_i \in \mathbb{Z}$ para $1 \leq i \leq n$ e $b \in \mathbb{Z}$.\\
+
+  {\bf Saída:} $i \in \mathbb{N}$ tal que $a_i = b$ se existir ou $\bot$ caso contrário.
+\end{example}
+
+\begin{example}
+  {\bf Problema da 3-soma}\\
+
+  {\bf Entrada:} Três sequência de $n \in \mathbb{N}$ valores cada $\langle a_1, \dots, a_n \rangle$,  $\langle b_1, \dots, b_n \rangle$ e $\langle c_1, \dots, c_n \rangle$ em que $a_i, b_i, c_i \in \mathbb{Z}$ para $1 \leq i \leq n$.\\
+
+  {\bf Saída:} O número $m \in \mathbb{N}$ de $i, j, k \in \mathbb{N}$ tal que $a_i + b_j + c_j = 0$.
+\end{example}
+
+\begin{example}
+  {\bf Problema da ordenação}\\
+
+  {\bf Entrada:} Uma sequência de $n \in \mathbb{N}$ valores $\langle a_1, \dots, a_n \rangle$ em que $a_i \in \mathbb{Z}$ para $1 \leq i \leq n$.\\
+
+  {\bf Saída:} Uma permutação da sequência de entrada $\langle a'_1, \dots, a'_n \rangle$ tal que $a_i \leq a_j$ para todo $i \leq j$.
+\end{example}
+
+Uma {\em instância do problema} consiste de uma entrada válida para a qual se pretende produzir uma saída esperada.
+Por exemplo, a sequência $\langle 3, 42, 17, 2, -1 \rangle$ é uma instância do problema da ordenação cuja saída esperada é $\langle -1, 2, 3, 17, 42 \rangle$.
+
+A disciplina de Introdução à Teoria da Computação (ITC) tem como objeto de estudo problemas computacionais, como eles se classificam entre os que tem solução ou não e entre os que tem solução eficiente ou não.
+A solução de um problema computacional é um algoritmo.
+
+Os objetos de estudo desta disciplina são os algoritmos.
+Mas afinal, o que são algoritmos?
+
+Um {\em algoritmo} parte de uma entrada escolhida em um conjunto potencialmente infinito de possibilidades ({\em princípio da massividade}) para produzir um valor de saída.
+O algoritmo processa a entrada por meio de uma sequência de passos ({\em princípio da discretude}) que produzem valores intermediários.
+Cada passo  segue uma instrução simples ({\em princípio da elementaridade}) que só depende dos valores anteriores, não admitindo ambiguidades ({\em princípio da exatidão}) \cite{malcev70}.
+
+Um {\em prorgrama} é a realização de um algoritmo em certa {\em linguagem de programação}.
+Assim, um algoritmo é, de um lado, a solução de um problema de computação e, de outro, uma abstração de um conjunto de programas, ele é a idéia por trás do programa.
+
+Um algoritmo é {\em correto} se para toda instância do problema ele produz a saída esperada depois de uma sequência finita de passos.
+Nesse caso dizemos que o algoritmo {\em resolve} o problema.
+
+Há uma controversa se devemos ou não considerar uma sequência infinita de instruções como um algoritmo.
+Essa questão, complicada, está no coração do nascimento da ciência da computação e será tratada em ITC.
+Neste curso focaremos nos algoritmos corretos e, assim, escaparemos da questão.
+
+Para enfatizar o fato de que um algoritmo é uma abstração de um programa, eles serão apresentados neste curso em uma linguagem informal conhecida como {\em pseudo-código}.
+
+\begin{example}
+  Considere a seguinte solução para o problema da busca.
+
+\begin{codebox}
+\Procname{$\proc{BuscaSimples}(A, b)$}
+\li \Comment Recebe $\langle a_1, \dots, a_n \rangle \in \mathbb{Z^n}$ e $b \in \mathbb{Z}$
+\li \Comment Devolve $i$ tal que $a_i = b$ se existir e $\bot$ caso contrário
+\li \For $i \gets 1$ até $n$
+\li \Do \If $a_i = b$
+\li     \Then \Return $i$
+        \End
+    \End
+\li \Return $\bot$
+\End
+\end{codebox}
+  
+\end{example}
+
+Esta disciplina estuda algoritmos.
+Como podemos garantir que certo algoritmo resolve um problema, ou seja, que ele é correto?
+Como podemos comparar duas soluções distintas para um mesmo problema?
+Ou seja, se conhecemos dois um mais algoritmos corretos para um mesmo problema, como avaliamos qual é melhor?
+
+Avaliaremos os algoritmos corretos a partir da quantidade de recursos que ele consome.
+Estudaremos particularmente dois recursos: espaço de memória e, principalmente, o tempo de execução.
+
+Nos capítulos seguintes veremos uma série de algoritmos para resolver alguns problemas centrais da computação como o problema da busca e da ordenação.
+Avaliaremos os algoritmos apresentado quanto sua corretude e sua eficiência em consumo de tempo e espaço de memória.
+
+No Capítulo X apresentaremos o estudo dos algoritmos a partir do método empírico.
+Relembraremos o método e veremos um exemplo comparando o tempo de execução de duas soluções para o problema da busca em sequências ordenadas.
+Então exploraremos técnicas para arrsicar modelos matemáticos adequados para avaliar o consumo de tempo dos algoritmos.
+E finalmente veremos ferramentas matemáticas uteis para comparar funções quanto ao seu crescimento, a chamada notação assintótica.
+No Capitulo X estudaremos algoritmos de ordenação como estudo de caso da teoria apresentada anteriormente.
+Veremos uma série de algoritmos que resolvem o mesmo problema e utilizaremos as técnicas apresentadas para construir e testar modelos do consumo de tempo deles.
+Estudaremos também um limite teórico da eficiência do problema da ordenação e veremos dois algoritmos que superam esse limite utilizando mais informações do que as assumidas no enunciado do teorema.
+Concluiremos a apostila no Capítulo X apresentando algoritmos e técnicas um pouco mais avançãdos como programação dinâmica e análise amortizada.
+
