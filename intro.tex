@@ -7,31 +7,53 @@ Um {\em problema computacional} é a especificação de uma relação desejada e
 \begin{example}
   {\bf Problema da busca}\\
 
-  {\bf Entrada:} Uma sequência de $n \in \mathbb{N}$ valores $\langle a_1, \dots, a_n \rangle$ em que $a_i \in \mathbb{Z}$ para $1 \leq i \leq n$ e $b \in \mathbb{Z}$.\\
+  {\bf Entrada:} Uma sequência de $n$ valores $a_1, \dots, a_n$ em que $a_i \in \mathbb{Z}$ para $1 \leq i \leq n$ e $b \in \mathbb{Z}$.\\
 
   {\bf Saída:} $i \in \mathbb{N}$ tal que $a_i = b$ se existir ou $\bot$ caso contrário.
+
+
+  A sequência $3, 5, 16, 17, -1$ junto do valor $5$ é uma entrada válida para este problema.
+  Qualquer entrada válida é chamada de {\em instância do problema}.
+  A saída esperada para essa instância é $2$, pois o valor $5$ ocorre na segunda posição da sequência.
+
+  Outra instância do problema é dada pela mesma sequência junto do valor $42$.
+  Neste caso a saída esperada é $\bot$, uma vez que o valor $42$ não ocorre na sequência.
 \end{example}
 
 \begin{example}
   {\bf Problema da 3-soma}\\
 
-  {\bf Entrada:} Três sequência de $n \in \mathbb{N}$ valores cada $\langle a_1, \dots, a_n \rangle$,  $\langle b_1, \dots, b_n \rangle$ e $\langle c_1, \dots, c_n \rangle$ em que $a_i, b_i, c_i \in \mathbb{Z}$ para $1 \leq i \leq n$.\\
+  {\bf Entrada:} Três sequência de $n \in \mathbb{N}$ valores cada $ a_1, \dots, a_n$,  $b_1, \dots, b_n$ e $c_1, \dots, c_n$ em que $a_i, b_i, c_i \in \mathbb{Z}$ para $1 \leq i \leq n$.\\
 
-  {\bf Saída:} O número $m \in \mathbb{N}$ de $i, j, k \in \mathbb{N}$ tal que $a_i + b_j + c_j = 0$.
+  {\bf Saída:} A quantidade de $i$s, $j$s e $k$s tais que $a_i + b_j + c_j = 0$.
+
+  Uma instância do problema é da pelas sequências:
+  \begin{itemize}
+  \item[] $1, 2, 3$
+  \item[] $2, 4, 6$
+  \item[] $-4, -8, -10$
+  \end{itemize}
+
+  A saída esperada neste caso é $2$ porque:
+  \begin{itemize}
+  \item[] $2 + 2 - 4 = 0$
+  \item[] $2 + 6 - 8 = 0$
+  \end{itemize}
 \end{example}
 
 \begin{example}
   {\bf Problema da ordenação}\\
 
-  {\bf Entrada:} Uma sequência de $n \in \mathbb{N}$ valores $\langle a_1, \dots, a_n \rangle$ em que $a_i \in \mathbb{Z}$ para $1 \leq i \leq n$.\\
+  {\bf Entrada:} Uma sequência de $n$ valores $a_1, \dots, a_n$ em que $a_i \in \mathbb{Z}$ para $1 \leq i \leq n$.\\
 
-  {\bf Saída:} Uma permutação da sequência de entrada $\langle a'_1, \dots, a'_n \rangle$ tal que $a_i \leq a_j$ para todo $i \leq j$.
+  {\bf Saída:} Uma permutação da sequência de entrada $a'_1, \dots, a'_n$ tal que $a_i \leq a_j$ para todo $i \leq j$.
+
+  Para a instância $3, 42, 17, 2, -1$ deste problema, a saída esperada é $-1, 2, 3, 17, 42$.
 \end{example}
 
-Uma {\em instância do problema} consiste de uma entrada válida para a qual se pretende produzir uma saída esperada.
-Por exemplo, a sequência $\langle 3, 42, 17, 2, -1 \rangle$ é uma instância do problema da ordenação cuja saída esperada é $\langle -1, 2, 3, 17, 42 \rangle$.
 
-A disciplina de Introdução à Teoria da Computação (ITC) tem como objeto de estudo problemas computacionais, como eles se classificam entre os que tem solução ou não e entre os que tem solução eficiente ou não.
+A disciplina de Introdução à Teoria da Computação (ITC) tem como objeto de estudo os problemas computacionais.
+Como eles se classificam entre os que tem solução ou não e entre os que tem solução eficiente ou não.
 A solução de um problema computacional é um algoritmo.
 
 Os objetos de estudo desta disciplina são os algoritmos.
@@ -42,23 +64,23 @@ O algoritmo processa a entrada por meio de uma sequência de passos ({\em princ�
 Cada passo  segue uma instrução simples ({\em princípio da elementaridade}) que só depende dos valores anteriores, não admitindo ambiguidades ({\em princípio da exatidão}) \cite{malcev70}.
 
 Um {\em prorgrama} é a realização de um algoritmo em certa {\em linguagem de programação}.
-Assim, um algoritmo é, de um lado, a solução de um problema de computação e, de outro, uma abstração de um conjunto de programas, ele é a idéia por trás do programa.
+Assim, um algoritmo é, de um lado, a solução de um problema de computação e, de outro, uma abstração de um conjunto de programas, ele é a idéia por trás desses programas.
 
 Um algoritmo é {\em correto} se para toda instância do problema ele produz a saída esperada depois de uma sequência finita de passos.
 Nesse caso dizemos que o algoritmo {\em resolve} o problema.
 
 Há uma controversa se devemos ou não considerar uma sequência infinita de instruções como um algoritmo.
 Essa questão, complicada, está no coração do nascimento da ciência da computação e será tratada em ITC.
-Neste curso focaremos nos algoritmos corretos e, assim, escaparemos da questão.
+Neste curso focaremos nos algoritmos corretos e, assim, escaparemos dela.
 
-Para enfatizar o fato de que um algoritmo é uma abstração de um programa, eles serão apresentados neste curso em uma linguagem informal conhecida como {\em pseudo-código}.
+Para enfatizar o fato de que algoritmos abstrações de programas, eles serão apresentados neste curso em uma linguagem informal conhecida como {\em pseudo-código}.
 
 \begin{example}
   Considere a seguinte solução para o problema da busca.
 
 \begin{codebox}
 \Procname{$\proc{BuscaSimples}(A, b)$}
-\li \Comment Recebe $\langle a_1, \dots, a_n \rangle \in \mathbb{Z}^n$ e $b \in \mathbb{Z}$
+\li \Comment Recebe $a_1, \dots, a_n$ com $a_i \in \mathbb{Z}$ e $b \in \mathbb{Z}$
 \li \Comment Devolve $i$ tal que $a_i = b$ se existir e $\bot$ caso contrário
 \li \For $i \gets 1$ até $n$
 \li \Do \If $a_i = b$
@@ -68,19 +90,29 @@ Para enfatizar o fato de que um algoritmo é uma abstração de um programa, ele
 \li \Return $\bot$
 \End
 \end{codebox}
-  
+
+
+As duas primeiras linhas são apenas comentários que explicitam a especificação do problema que o algoritmo resolve.
+A linha 3 indica que um certo valor $i$ deve variar de $1$ até $n$.
+As duas linhas seguintes estabelecem que se $a_i$ for igual a $b$ então o valor de $i$ deve ser devolvido como resposta do problema.
+Por fim, a última linha indica que se o algoritmo chegou naquele ponto, então o valor $\bot$ deve ser devolvido como solução do problema.
+
 \end{example}
 
 Esta disciplina estuda algoritmos.
 Como podemos garantir que certo algoritmo resolve um problema, ou seja, que ele é correto?
+O algoritmo do exemplo acima está correto?
+Por que?
 Como podemos comparar duas soluções distintas para um mesmo problema?
 Ou seja, se conhecemos dois um mais algoritmos corretos para um mesmo problema, como avaliamos qual é melhor?
+O algoritmo do exemplo acima é o melhor algoritmo possível para o problema da busca?
+Como podemos garantir isso?
 
-Avaliaremos os algoritmos corretos a partir da quantidade de recursos que ele consome.
+Avaliaremos os algoritmos corretos a partir da quantidade de recursos que eles consomem.
 Estudaremos particularmente dois recursos: espaço de memória e, principalmente, o tempo de execução.
 
 Nos capítulos seguintes veremos uma série de algoritmos para resolver alguns problemas centrais da computação como o problema da busca e da ordenação.
-Avaliaremos os algoritmos apresentado quanto sua corretude e sua eficiência em consumo de tempo e espaço de memória.
+Em cada caso avaliaremos os algoritmos apresentados quanto sua corretude e sua eficiência em consumo de tempo e espaço de memória.
 
 No Capítulo X apresentaremos o estudo dos algoritmos a partir do método empírico.
 Relembraremos o método e veremos um exemplo comparando o tempo de execução de duas soluções para o problema da busca em sequências ordenadas.
