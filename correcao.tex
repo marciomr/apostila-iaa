@@ -1,0 +1,167 @@
+\chapter{Correção}
+
+No capítulo anterior vimos que é possível utilizar o método empírico para avaliar tempo de processamento de diferentes soluções para um mesmo problema.
+Neste capítulo daremos um passo atrás.
+Como podemos garantir, para começo de conversa, que um algoritmo de fato resolve um problema?
+Em outras palavras, como podemos provar a correção de um algoritmo?
+
+Para provar a correção de um algoritmo iremos usar uma forma de prova por indução.
+Assim, antes de partir para os exemplos de prova por indução em um algoritmo, vale a pena relembrar como funciona uma prova por indução em um contexto mais típico.
+
+Normalmente, uma prova por indução é usada para provar alguma propriedade sobre números naturais.
+A ideia de uma prova por indução é relativamente simples.
+Ela se divide em três etapas.
+Primeiro precisamos provar que a propriedade vale para o $0$ ou para o primeiro número que nos interessa.
+Isso é chamado de {\em Base da Indução}.
+Então supomos que a propriedade vale para um número $n$, {\em Hipótese da Indução}.
+Por fim, provamos que se vale para $n$ então vale para $n+1$, {\em Passo de Indução}.
+Assim, mostramos que vale para $0$ e se vale para $0$, deve valer para $1$, e se vale para $1$, deve valer para $2$ e assim por diante.
+Com isso, provamos que a propriedade vale para todos os números naturais.
+
+Vejamos um exemplo.
+Considere a seguinte somatória:
+
+\begin{displaymath}
+  1 + 2 + 3 + \dots + n = \sum_{i=1}^n i = \frac{n(n+1)}{2}
+\end{displaymath}
+
+Vamos provar por indução que esse resultado vale para qualquer número natural $n$.
+
+O primeiro passo é provar a base da indução.
+Vamos provar que o resultado vale para $n = 1$
+
+\begin{displaymath}
+  1 = \frac{1(1+1)}{2}
+\end{displaymath}
+
+Agora vamos explicitar a Hipótese de Induação.
+
+\begin{displaymath}
+  1 + 2 + 3 + \dots + n = \frac{n(n+1)}{2}
+\end{displaymath}
+
+Por fim, fazemos o Passo de Indução.
+
+\begin{eqnarray*}
+  1 + 2 + 3 + \dots + n + n + 1 & = & \frac{n(n+1)}{2} + n + 1 \\
+  & = & \frac{n^2 + n + 2n + 2}{2} \\
+  & = & \frac{n^2 + 3n + 2}{2} \\
+  & = & \frac{(n+1)(n+2)}{2} \\
+\end{eqnarray*}
+
+Note que a primeira equação vale por conta da Hipótese de Indução.
+
+Passemos agora para um problema computacional.
+Continuemos considerando o problema da busca em uma sequência ordenada e os dois algoritmos que conhecemos para ele.
+Primeiro o algoritmo da busca sequencial:
+
+\begin{codebox}
+\Procname{$\proc{BuscaSequencial}(A, b)$}
+\li \For $i \gets 1$ até $n$
+\li \Do \If $a_i = b$
+\li     \Then \Return $i$
+        \End
+    \End
+\li \Return $\bot$
+\End
+\end{codebox}
+
+Para mostrar que o algoritmo é correto temos que incontrar um {\em invariante}.
+Uma propriedade que vale em todas as iterações.
+No nosso caso, vamos considerar a linha 2 do algoritmo e a propriedade será a seguinte:
+
+\begin{displaymath}
+b \textrm{ não ocorre em } a_1, \dots, a_{i-1}
+\end{displaymath}
+
+Vamos provar que essa propriedade é de fato invariante usando a técnica da indução.
+
+Primeiro temos que provar que ela vale para $i = 1$.
+Essa é a base da indução.
+
+Para isso basta notar que neste caso a sequência é vazia e, portanto, $b$ não pertence a ela.
+
+A Hipótese de Indução já foi explicitada.
+Para mostrar o passo de indução vamos supor a HI e mostrar que a propriedade continua valendo para $i+1$.
+Se $b$ estivesse na sequência $a_1 \dots a_i$ então, pela HI, $b = a_i$.
+Neste caso, não chegaríamos na linha 2, porque o algoritmo teria encerrado antes disso.
+
+Assim, sempre que chegamos na linha 2, $b$ não ocorre em $a_1, dots, a_{i-1}$.
+Portanto, quando chegamos na 3, é a primeira vez em que $a_i = b$.
+E se chegarmos na linha 4, sabemos que $b$ não ocorre em $a_1, \dots, a_n$.
+
+
+Vamos agora para nosso segundo exemplo:
+
+
+\begin{codebox}
+  \Procname{$\proc{BuscaBinaria}(A, b)$}
+  \li $i \gets 1$
+  \li $j \gets |A|$
+  \li \While $i \leq j$
+  \li \Do $m \gets \left \lfloor{\frac{j+i}{2}}\right\rfloor$
+  \li \If $b < a_m$
+  \li     \Then $j \gets m - 1$
+  \li \Else
+      \If $b > a_m$
+  \li      \Then $i \gets m + 1$
+  \li \Else \Return m 
+      \End
+  \End
+  \End
+  \li \Return $\bot$
+\end{codebox}
+
+Vamos mostrar que as seguintes propriedades são invariantes na linha 4:
+
+\begin{displaymath}
+b \textrm{ não ocorre em } a_1, \dots, a_{i-1}
+\end{displaymath}
+
+\begin{displaymath}
+b \textrm{ não ocorre em } a_{j+1}, \dots, a_n
+\end{displaymath}
+
+A base da indução é simples, no primeiro momento $i = 1$ e $j = n$.
+Portanto ambas propriedades valem porque as duas sequências são vazias nessas condições.
+
+Vamos supor que a propriedade vale em um certo momento quando chegamos na linha 4.
+Agora imagine que chegamos mais uma vez nessa linha.
+Neste caso, não saímos do laço.
+Portanto, uma de duas coisas teve que ocorrer:
+$b < a_m$ ou $b >a_m$.
+
+No primeiro caso, temos que $j = m-1$.
+Como a sequência está ordenada, $b$ não ocorre em $a_{j+1} = a_m, \dots, a_n$ porque $b < a_m$.
+Além disso, pela hipótese de indução, temos que $b$ não ocorre em $a_1, \dots, a_{i-1}$.
+
+No segundo caso, temos que $i = m+1$.
+Como a sequência está ordenada, $b$ não ocorre em $a_{1} = a_{1}, \dots, a_n$ porque $b > a_m$.
+Além disso, pela hipótese de indução, temos que $b$ não ocorre em $a_{j+1}, \dots, a_n$.
+
+O invariante vale sempre na linha 4.
+Se chegarmos na linha 9 é proque $a_m = b$ e se chegarmos na linha 10 é porque $b$ não está nem em $a_1, \dots, a_i$ nem em $a_j, \dots, a_n$ e $i > j$.
+Portanto $b$ não está em $a_1, \dots, a_n$.
+
+\vspace{2cm}
+
+\begin{exercicio}
+  Considere o seguinte algoritmo:
+
+\begin{codebox}
+  \Procname{$\proc{3Soma}(A, B, C)$}
+  \li $n \gets 0$
+  \li \For $i \gets 1$ até $n$
+  \li \Do \For $j \gets 1$ até $n$
+  \li     \Do \For $k \gets 1$ até $n$
+  \li         \If $a_i + b_j + c_k = 0$
+  \li         \Then $n \gets n + 1$
+  \End
+  \End
+  \End
+  \li \Return $n$
+\end{codebox}
+
+Prove que este algoritmo resolve o problema da 3-soma apresentado no Capítulo \ref{cha:intro}.
+  
+\end{exercicio}
