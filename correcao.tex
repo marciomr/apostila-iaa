@@ -66,7 +66,7 @@ Primeiro o algoritmo da busca sequencial:
 \End
 \end{codebox}
 
-Para mostrar que o algoritmo é correto temos que incontrar um {\em invariante}.
+Para mostrar que o algoritmo é correto temos que encontrar um {\em invariante}.
 Uma propriedade que vale em todas as iterações.
 No nosso caso, vamos considerar a linha 2 do algoritmo e a propriedade será a seguinte:
 
@@ -74,24 +74,47 @@ No nosso caso, vamos considerar a linha 2 do algoritmo e a propriedade será a s
 b \textrm{ não ocorre em } a_1, \dots, a_{i-1}
 \end{displaymath}
 
-Vamos provar que essa propriedade é de fato invariante usando a técnica da indução.
 
-Primeiro temos que provar que ela vale para $i = 1$.
-Essa é a base da indução.
+Para provar que essa propriedade é de fato invariante, usaremos um técnica similar às provas de indução.
+Primeiro precisamos mostrar que a propriedade vale na primeira vez que entramos no laço.
+Essa etapa é chamada de {\em inicialização} e corresponde à base da indução.
 
-Para isso basta notar que neste caso a sequência é vazia e, portanto, $b$ não pertence a ela.
+Neste caso, basta notar que neste caso a sequência é vazia e, portanto, $b$ não pertence a ela.
 
-A Hipótese de Indução já foi explicitada.
-Para mostrar o passo de indução vamos supor a HI e mostrar que a propriedade continua valendo para $i+1$.
-Se $b$ estivesse na sequência $a_1 \dots a_i$ então, pela HI, $b = a_i$.
-Neste caso, não chegaríamos na linha 2, porque o algoritmo teria encerrado antes disso.
-
-Assim, sempre que chegamos na linha 2, $b$ não ocorre em $a_1, dots, a_{i-1}$.
-Portanto, quando chegamos na 3, é a primeira vez em que $a_i = b$.
-E se chegarmos na linha 4, sabemos que $b$ não ocorre em $a_1, \dots, a_n$.
+Em seguida precisamos fazer o passo de indução supondo a hipótese da indução.
+Para tanto, faremos o seguinte.
+Iremos supor que a propriedade valia na iteração anterior do laço.
+Em seguinda provaremos que a propriedade continua valendo depois de uma nova iteração.
+Essa etapa é chamada de {\em manutenção}.
 
 
-Vamos agora para nosso segundo exemplo:
+Pela Hipótese da Indução, ee $b$ estivesse na sequência $a_1, \dots, a_i$ então, necessariamente temos que $b = a_i$.
+Neste caso, não chegaríamos na linha 2, porque o algoritmo teria encerrado na linha 3.
+
+Assim, sempre que chegamos na linha 2, $b$ não ocorre em $a_1, \dots, a_{i-1}$.
+Ou seja, a propriedade de fato é um invariante.
+
+Para concluir a prova vamos usar a propriedade invariante para provar que a saída esperada é aquela produzida pelo algoritmo.
+Para isso, precisamos analisar o que ocorre quando saímos do laço.
+Essa etapa é chamara de {\em término}.
+
+No nosso exemplo, o invariante nos mostra que quando chegamos na linha 3, é a primeira vez em que $a_i = b$.
+E que se chegarmos na linha 4, sabemos que $b$ não ocorre em $a_1, \dots, a_n$.
+
+Resumindo o que vimos até aqui.
+Para demonstrar a correção de um algoritmo, o primeiro passo é encontrar uma propriedade {\em invariante}.
+Seguimos então os seguintes passos:
+\begin{enumerate}
+\item {\em Inicialização}: provamos que a propriedade vale na primeira iteração (isso equivale a prova da base da indução).
+\item {\em Manutenção}: provamos que se a propriedade valia na iteração anterior (hipótese da indução), ela continua valendo na iteração atual (isso equivale ao passo de indução).
+\item {\em Término}: usamos o invariante para avaliar o que acontece quando saímos do laço.
+\end{enumerate}
+
+Os dois primeiros passos são inspirados na prova por indução e servem para provar que a propriedade escolhida é, de fato, invariante.
+O terceiro passo completa a prova da correção.
+
+
+Vamos agora para um exemplo um pouco mais complexo:
 
 
 \begin{codebox}
@@ -122,9 +145,10 @@ b \textrm{ não ocorre em } a_1, \dots, a_{i-1}
 b \textrm{ não ocorre em } a_{j+1}, \dots, a_n
 \end{displaymath}
 
-A base da indução é simples, no primeiro momento $i = 1$ e $j = n$.
+A inicialização é simples, no primeiro momento $i = 1$ e $j = n$.
 Portanto ambas propriedades valem porque as duas sequências são vazias nessas condições.
 
+A etapa de manutenção segue da seguinte forma.
 Vamos supor que a propriedade vale em um certo momento quando chegamos na linha 4.
 Agora imagine que chegamos mais uma vez nessa linha.
 Neste caso, não saímos do laço.
@@ -139,6 +163,7 @@ No segundo caso, temos que $i = m+1$.
 Como a sequência está ordenada, $b$ não ocorre em $a_{1} = a_{1}, \dots, a_n$ porque $b > a_m$.
 Além disso, pela hipótese de indução, temos que $b$ não ocorre em $a_{j+1}, \dots, a_n$.
 
+Para completar a prova, falta o término.
 O invariante vale sempre na linha 4.
 Se chegarmos na linha 9 é proque $a_m = b$ e se chegarmos na linha 10 é porque $b$ não está nem em $a_1, \dots, a_i$ nem em $a_j, \dots, a_n$ e $i > j$.
 Portanto $b$ não está em $a_1, \dots, a_n$.
@@ -150,16 +175,16 @@ Portanto $b$ não está em $a_1, \dots, a_n$.
 
 \begin{codebox}
   \Procname{$\proc{3Soma}(A, B, C)$}
-  \li $n \gets 0$
+  \li $m \gets 0$
   \li \For $i \gets 1$ até $n$
   \li \Do \For $j \gets 1$ até $n$
   \li     \Do \For $k \gets 1$ até $n$
   \li         \If $a_i + b_j + c_k = 0$
-  \li         \Then $n \gets n + 1$
+  \li         \Then $m \gets m + 1$
   \End
   \End
   \End
-  \li \Return $n$
+  \li \Return $m$
 \end{codebox}
 
 Prove que este algoritmo resolve o problema da 3-soma apresentado no Capítulo \ref{cha:intro}.
