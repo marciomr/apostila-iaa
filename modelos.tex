@@ -19,41 +19,41 @@ Vamos mais uma vez considerar os algortimos de busca que temos estudado.
 \end{codebox}
 
 Quando esse algoritmo for implementado e executado em uma máquina, as instruções seguidas tomarão um tempo que depende de uma série de fatores.
-A atualização da variável $i$ na linha 1, por exemplo, deve tomar um tempo.
-Digamos que esse tempo seja representao por $c_1$.
-A comparação de $a_i$ com $b$ na linha 2 deve tomar algum tempo, digamos $c_2$.
-Devolver um valor na linha 3 tomará tempo $c_3$ e devolver o erro na linha 4 tomará tempo $c_4$.
+Vamos seguir a suposição razoável que instruções iguais tomarão o mesmo tempo em uma mesmo contexto.
+Assim, podemos supor, por exemplo, que:
+\begin{itemize}
+\item incrementar uma variável (linha 1) toma tempo $c_1$
+\item comparar duas variáveis (lina 2) toma tempo $c_2$
+\item devolver um valor (linhas 3 e 4) toma tempo $c_3$
+\end{itemize}
 
-Não sabemos exatamente quanto é esse tempo e ele deve variar dependendo da máquina, do sistema operacional e outros fatores.
-A suposição que faremos é apenas que o tempo é constante.
-Deve variar ligeiramente o tempo que uma máquina leva para atualizar a variável $i$, mas essa variação deve ficar em torno de uma média.
-Portanto, é razoável supor que esse tempo é constante.
+Os valores de $c_1$, $c_2$ e $c_3$ deve ser diferente a depender do contexto, mas vamos supor que sejam {\em constantes} em um mesmo contexto.
+Fazendo essa suposição, vamos então contar quantas vezes cada uma dessas operações é feita.
 
-O que devemos fazer, então é contar o número de vezes que cada operações ocorre.
-A primeira e a segunda linha ocorrerão no máximo $n$ vezes.
-Já a terceira e a quarta linha no máximo uma vez.
-Assim, um bom modelo para o cosumo de tempo que este algoritmo deve tomar em função do tamanho da sequência $n$ é:
+O número de repetições depende de duas coisas: o tamanho da entrada ($n$) e os valores da entrada.
+Gostaríamos de um modelo que dependesse apenas do tamanho da entrada.
+Podemos fazer dois tipos de análises para abstrair os valores da entrada:
+\begin{itemize}
+\item {\em análise de caso médio}: nos dá um valor mais preciso, mas depende da distribuição de probabilidade da entrada ou
+  \item {\em análise de pior caso}: nos dá um valor menos preciso, mas ainda assim bastante útil e não depende de nenhuma suposição sobre os valores da entrada.
+  \end{itemize}
+
+Nos focaremos em análises de pior caso porque na maioria das vezes não sabemos de antemão a distribuição de probabilidade da entrada.
+
+Vamos contar o número de repetições de cada operação assumindo o pior caso:
+\begin{itemize}
+\item a atualização da variável $i$ na linha 1 se repete $n$ vezes,
+\item a comparação na linha 2 se repete $n$ vezes no pior caso e
+\item as linhas 3 e 4 ocorrem uma única vez ao todo durante toda a execução.
+\end{itemize}
+
+Podemos então construir o seguinte modelo para o tempo de processamento do algoritmo no pior caso em função do tamanho $n$ da entrada:
 
 \begin{displaymath}
-  t(n) \leq c_1.n + c_2.n + c_3 + c_4 
+  t(n) = c_1n + c_2n + c_3 = (c_1 + c_2)n + c_3
 \end{displaymath}
 
-Nosso modelo varia com o tamanho e com os valores da entrada.
-Se quisermos um modelo que varia apenas com o tamanho, precisamos fazer alguma suposição.
-Na maior parte deste curso faremos uma {\em análise de pior caso}.
-No nosso exmeplo, o pior caso ocorre quando o elemento $b$ não está na sequência $A$.
-
-Em algumas situações específicas é útil fazer uma análise de caso médio.
-Mas em geral não conhecemos o suficiente sobre a distribuição de probabilidade da entrada.
-Uma análise de pior caso nos dá um limite de quanto tempo o processamento dos dados tomará levando em conta apenas o tamanho da entrada.
-
-No nosso caso, o modelo ficaria assim:
-
-\begin{displaymath}
-  t(n) = c_1.n + c_2.n + c_3 + c_4 = (c_1 + c_2).n + c_3 + c_4 = a.n + b
-\end{displaymath}
-
-Note que chegamos no mesmo modelo que apresentamos no Capítulo \ref{}.
+O mesmo modelo que extraímos das observações no Capítulo \ref{}.
 
 Vamos agora replicar esse mesmo tipo de análise para nosso outro algoritmo.
 \begin{codebox}
@@ -74,42 +74,41 @@ Vamos agora replicar esse mesmo tipo de análise para nosso outro algoritmo.
   \li \Return $\bot$
 \end{codebox}
 
-Vamos atribuir constantes $c_1, dots, c_{10}$ para o tempo de processamento de cada uma das 10 linhas do algoritmo.
-Agora vamos contar as linhas.
-As linhas 1, 2 serão executadas uma vez cada.
-Contar as demais linhas é mais complicado.
+O primeiro passo é atribuir constantes para o tempo de processamento de cada operação atômica:
+\begin{itemize}
+\item $c_1$ para as atribuições nas linhas 1 e 2,
+\item $c_2$ para as comparações nas linhas 5 e 7,
+\item $c_3$ para a divisão na linha 4,
+\item $c_4$ para o incremento e decremento nas linhas 6 e 8 e
+\item $c_5$ para devolver um valor nas linhas 9 e 10.
+\end{itemize}
 
-Primeiro vamos lembrar que faremos uma análise de pior caso.
-Assim, a linha 9 não será executada nunca e a 10 será executada apenas uma vez.
-Outra observação é que toda vez que executarmos a linha 4, executaremos ou as linhas 5 e 6 ou as linhas 7 e 8.
-Para simplificar, vamos supor que o tempo de execução da linha 5 é o mesmo que da 7 ($c_5$) e que o tempo de execução da linha 6 é o mesmo que da 8 ($c_6$).
-Digamos que entremos $x$ vezes no laço.
-Então nosso modelo até aqui é:
+Agora vamos contar o número de vezes que cada linha é executada no pior caso.
+As linhas 1 e 2 são executadas uma vez cada.
+As linhas 9 e 10 são executadas uma vez ao todo.
+Já as linhas 3 a 6 são executadas enquanto $i \leq j$.
+
+Para avaliar quantas vezes as linhas 3-6 são executadas, vamos primeiro supor que o tamanho da sequência é uma potência de $2$ e, portanto, existem $x$ tal que:
 
 \begin{displaymath}
-  t(n) = c_3.x + c_4.x + c_5.x + c_6.x + c_1 + c_2 + c_{10} = (c_3 + c_4 + c_5).x + c_1 + c_2 + c_{10} = a.x + b 
+  n = 2^x \Rightarrow x = log_2(n)
 \end{displaymath}
 
-Precisamos agora calular $x$ em termos de $n$.
+O pedaço da sequência que nos interessa é $a_i, \dots, a_j$ -- na prova da correção vimos $b$ nunca está no outro pedaço da sequência.
+Note agora que a cada passo o tamanho dessa sequência diminui pela metade.
+Ele começa sendo $n = 2^x$, cai para $\frac{n}{2} = 2^{x-1}$ na segunda iteração e assim consecutivamente até chegar em $1 = 2^0$.
+Precisamo de $x$ passos para chegar no último passo.
 
-Para simplificar ainda mais um pouco nosso trabalho, vamos supor que o tamanho da sequência $n$ é uma potência de 2, ou seja, $n = 2^y$ para algum $y$.
-Agora note que cada vez que entramos no laço, metade da sequência é descartada.
+Assim, temos o seguinte modelo para o tempo e processamento do algoritmo:
 
-Na primeira iteração o pedaço da sequência que estamos considerando é $n = 2^y$.
-Na segunda iteração ele tem tamanho $\frac{n}{2} = 2^{y-1}$.
-Na terceira ele tem tamanho $\frac{n}{4} = 2^{y-2}$
-Esse processo ira continuar até que o tamanho da nossa sequência seja $1 = 2^0$.
-Ou seja, do começo ao final do processo as linhas 3 - 6 serão executadas $y$ vezes.
-Como $n = 2^y$ temos que $y = log_2(n)$.
-
-Neste curso, o logaritmo na base 2 será tão comum que vale a pena usar uma abreviação para ele.
-Escreveremos apenas $lg$.
-
-Assim, nosso modelo fica:
 \begin{displaymath}
-  t(n) = a.lg(n) + b 
+  t(2^x) = 2c_1 + c_5 + x(3c_2 + c_3 + c_4)
 \end{displaymath}
 
-Mais uma vez, o modelo que chegamos ao contar o número de repetições de cada linha coincide com o modelo que chegamos a partir das observações.
+Aplicando a mudança de variável, temos que:
 
+\begin{displaymath}
+  t(n) = (3c_2 + c_3 + c_4)log_2(n) + 2c_1 + c_5
+\end{displaymath}
 
+O mesmo modelo que obtivemos no Capítulo \ref{} a partir das observações.
