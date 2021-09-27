@@ -151,3 +151,137 @@ Algumas classes de funções são bastante recorrentes ao analisar o tempo de pr
 \item Cúbica $\Theta(n^3)$
 \item Exponencial $\Theta(2^n)$
 \end{itemize}
+
+Embora a notação $\Theta$ represente um conjunto de funções, abusaremos um pouco dela para usá-la em equações.
+Assim, quando escrevermos por exemplo $n\Theta(n) = \Theta(n^2)$ o que queremos dizer é que para qualquer $f(n) \in \Theta(n)$ temos que $n.f(n) \in \Theta(n^2)$.
+De fato, podemos mostrar isso:
+
+\begin{example}
+  \begin{displaymath}
+    n\Theta(n) = \Theta(n^2)
+  \end{displaymath}
+
+  Se $f(n) \in \Theta(n)$ então, por definição, existem $c_1$, $c_2$ e $n_0$ tais que:
+  \begin{displaymath}
+    0 \leq c_1 \cdot n \leq f(n) \leq c_2 \cdot n \textrm{ para todo } n \geq n_0
+  \end{displaymath}
+  Considerando $n_0 > 0$ e multiplicando tudo por $n$ temos que:
+    \begin{displaymath}
+    0 \leq c_1 \cdot n^2 \leq n \cdot f(n) \leq c_2 \cdot n^2 \textrm{ para todo } n \geq n_0
+  \end{displaymath}
+\end{example}
+
+Considere mais uma vez o algoritmo da Busca Sequencial.
+As duas primeiras linhas são executadas $\Theta(n)$ vezes no pior caso.
+Já as duas últimas $\Theta(1)$ vezes.
+
+Como isso temos que o tempo de execução em função do tamanho da entrada $n$ no pior caso segue a seguinte função:
+
+\begin{displaymath}
+  T(n) = \Theta(n) + \Theta(n) + \Theta(1) = \Theta(n)
+\end{displaymath}
+
+\begin{example}
+
+  Primeiro note que $\Theta(1)$ é uma constante.
+  Isso porque, por definição temos que:
+
+  \begin{displaymath}
+    0 \leq c_1 \leq f_3(n) \leq c_2 \textrm{ para todo } n \geq n_1
+  \end{displaymath}
+
+  As outras duas funções precisam respeitar as seguintes inequações:
+
+  \begin{displaymath}
+    0 \leq c_3\cdot n \leq f_1(n) \leq c_4 \cdot n\textrm{ para todo } n \geq n_2
+  \end{displaymath}
+
+  \begin{displaymath}
+    0 \leq c_5 \cdot n \leq f_2(n) \leq c_6 \cdot n\textrm{ para todo } n \geq n_3
+  \end{displaymath}
+
+  Somando tudo temos que:
+
+  \begin{displaymath}
+    0 \leq c_1 + (c_3 + c_5)n \leq f_1(n) + f_2(n) + f_3(n)\leq c_2 + (c_4 + c_6)n \textrm{ para todo } n \geq max(n_1,n_2,n_3)
+  \end{displaymath}
+
+  Para completar a prova basta notar que:
+
+  \begin{displaymath}
+    0 \leq (c_3 + c_5)n \leq f_1(n) + f_2(n) + f_3(n)\leq (c_2 + c_4 + c_6)n \textrm{ para todo } n \geq max(n_1,n_2,n_3,1)
+  \end{displaymath}
+  
+\end{example}
+
+  A notação $\Theta$ indica limites inferior e superior para o crescimento de uma função.
+  Quando avaliamos o tempo e processamento de um algoritmo, é comum desejarmos garantir que ele seja suficientemente eficiente.
+  Ou seja, em geral queremos estabelecer apenas o {\em limite assintótico superior}.
+  Para tanto, utilizamos a notação $O$.
+
+  \begin{displaymath}
+    O(g(n) := \{f(n) : \exists c, n_o \textrm{ tais que } 0 \leq f(n) \leq cg(n) \forall n \geq n_0 \}
+  \end{displaymath}
+
+  Sempre que $f(n) \in \Theta(g(n))$ temos que $f(n) \in O(g(n))$.
+  Ou seja, $\Theta(g(n)) \subseteq O(g(n))$.
+  Já a recíproca não é necessariamente verdadeira:
+
+  \begin{example}
+    $n \notin \Theta(n^2)$, mas $n \in O(n^2)$
+
+    A primeira parte é totalmente análoga ao Exemplo \ref{}.
+    Para mostrar a segunda, note que:
+
+    \begin{displaymath}
+     0 \leq n \leq n^2 \forall n \geq 1
+    \end{displaymath}
+  \end{example}
+
+  Da mesma forma, existem situações em que nos interessa apenas o {\em limite assintótico inferior} de uma função.
+  Por exemplo, quando avaliamos certos problemas computacionais, em alguns casos específicos sabemos que é impossível resolver o problema de maneira assintoticamente mais eficiente do que certa função $f(n)$.
+  Nesses casos, dizemos que o problema é $\Omega(f(n))$.
+
+  \begin{displaymath}
+    \Omega(g(n) := \{f(n) : \exists c, n_o \textrm{ tais que } 0 \leq cg(n) \leq f(n) \forall n \geq n_0 \}
+  \end{displaymath}
+
+  Quando temos uma solução $O(g(n))$ para um problema $\Omega(g(n))$ dizemos que essa solução é {\em ótima}. 
+
+  \begin{example}
+    O problema da busca em uma sequência arbitrária é $\Omega(n)$.
+    Isso porque precisamos consultar todos $n$ elementos da sequência para saber se o elemento pertence a ela ou não.
+
+    Assim, o algoritmo de BuscaSequencial que temos estudado é ótimo para o problema da busca em sequência arbitrária, mas ele não é ótimo para o problema da busca em sequência ordenada.
+    Para este segundo problema conhecemos uma solução $O(log(n))$.
+  \end{example}
+
+  \begin{theorem}
+    Para qualquer função $g(n)$ temos que $f(n) \in \Theta(g(n))$ se e somente se $f(n) \in O(g(n))$ e $f(n) \in \Omega(g(n))$. Em outras palavras: $\Theta(g(n)) = O(g(n)) \cap \Omega(g(n))$
+  \end{theorem}
+
+  Quando analisamos o tempo de processamento de um algoritmo como uma função do tamanho da entrada, é consensual a simplificação de desprezar os termos não dominantes e, com isso, simplificar as contas considerando apenas o comportamento assintótico.
+  Há uma controvérsia, porém, sobre a constante multiplicadora do fator dominante.
+  Alguns autores a desprezam por se tratar de um valor que depende do contexto.
+  Outros autores, avaliam que esse valor não deve ser desprezado.
+  No primeiro caso, utilizamos a notação $\Theta$ já apresentada.
+  No segundo caso, utilizamos a notação til ($\sim$).
+
+  Assim, por exemplo, temos que:
+
+  \begin{displaymath}
+    4n^3 + 2n + 8 \sim 4n^3 \in \Theta(n^3)
+  \end{displaymath}
+
+  Já um exemplo negativo seria:
+
+  \begin{displaymath}
+    4n^3 + 2n + 8 \nsim 2n^3 
+  \end{displaymath}
+
+  Formalmente, dizemos que $f(n) \sim g(n)$ se e somente se $lim_{n \to \infty}\frac{f(n)}{g(n)} = 1$.
+  
+  
+\begin{exercicio}
+  Mostre que o tempo de processamento do algorítimo $3Soma$ é $\Theta(n^3)$ no pior caso.
+\end{exercicio}

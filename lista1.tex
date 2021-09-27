@@ -1,0 +1,78 @@
+\documentclass[a4,12pt]{article}
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[portugues]{mystyle}
+\usepackage{clrscode}
+
+
+\newcounter{mycounter}
+\setcounter{mycounter}{0}
+\newenvironment{exercicio}{\refstepcounter{mycounter}
+    {\bf Exercício~\themycounter: }
+      \rmfamily}{\medskip}
+
+\begin{document}
+
+\author{Márcio Moretto Ribeiro}
+
+\title{Lista 1: Introdução à Análise de Algoritmos}
+
+\maketitle
+
+  {\bf Problema da 3-soma}\\
+
+  {\bf Entrada:} Três sequência de $n \in \mathbb{N}$ valores cada $ a_1, \dots, a_n$,  $b_1, \dots, b_n$ e $c_1, \dots, c_n$ em que $a_i, b_i, c_i \in \mathbb{Z}$ para $1 \leq i \leq n$.\\
+
+  {\bf Saída:} A quantidade de $i$s, $j$s e $k$s tais que $a_i + b_j + c_j = 0$.
+
+  \vspace{2cm}
+  
+\begin{exercicio}
+
+  Considere o seguinte algoritmo:
+
+\begin{codebox}
+  \Procname{$\proc{3Soma}(A, B, C)$}
+  \li $m \gets 0$
+  \li \For $i \gets 1$ até $n$
+  \li \Do \For $j \gets 1$ até $n$
+  \li     \Do \For $k \gets 1$ até $n$
+  \li         \If $a_i + b_j + c_k = 0$
+  \li         \Then $m \gets m + 1$
+  \End
+  \End
+  \End
+  \li \Return $m$
+\end{codebox}
+
+Prove que este algoritmo resolve o problema da 3-soma, ou seja, que ele é correto.
+  
+\end{exercicio}
+
+\newpage
+
+\begin{exercicio}
+Considere o seguinte algoritmo $3Soma$ apresnetado no final do capítulo anterior.
+Calcule o tempo de processamento em função do tamanho $n$ da entrada assumindo que:
+
+\begin{itemize}
+\item Cada iteração de variável toma tempo constante $c_1$
+\item Cada atribuição toma tempo constante $c_2$
+\item Cada soma toma tempo constante $c_3$
+\item A saída toma tempo constante $c_4$
+\end{itemize}
+  
+\end{exercicio}
+
+
+\begin{exercicio}
+  Mostre que o tempo de processamento do algorítimo $3Soma$ é $\Theta(n^3)$ no pior caso.
+\end{exercicio}
+
+
+\begin{exercicio}
+  Descreva em pseudo-código um algoritmo cujo tempo de processamento no pior caso é $\Theta(n^2log(n))$.
+  Dica: ordene a sequência $c_1, \dots, c_n$ usando qualquer um dos métodos visto em aula e use a busca binária.
+\end{exercicio}
+
+\end{document}
