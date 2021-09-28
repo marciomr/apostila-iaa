@@ -200,16 +200,16 @@ Como isso temos que o tempo de execução em função do tamanho da entrada $n$ 
     0 \leq c_5 \cdot n \leq f_2(n) \leq c_6 \cdot n\textrm{ para todo } n \geq n_3
   \end{displaymath}
 
-  Somando tudo temos que:
+  Somando $f_1$ e $f_2$ temos que:
 
   \begin{displaymath}
-    0 \leq c_1 + (c_3 + c_5)n \leq f_1(n) + f_2(n) + f_3(n)\leq c_2 + (c_4 + c_6)n \textrm{ para todo } n \geq max(n_1,n_2,n_3)
+    0 \leq (c_3 + c_5)n \leq f_1(n) + f_2(n) \leq (c_4 + c_6)n\ \forall n \geq max(n_1,n_2)
   \end{displaymath}
-
-  Para completar a prova basta notar que:
+  
+  Se somarmos $f_3$, certamente não alteramos as inequações do lado esquerdo e do lado direito temos:
 
   \begin{displaymath}
-    0 \leq (c_3 + c_5)n \leq f_1(n) + f_2(n) + f_3(n)\leq (c_2 + c_4 + c_6)n \textrm{ para todo } n \geq max(n_1,n_2,n_3,1)
+    f_1(n) + f_2(n) + f_3(n)\leq (c_2 + c_4 + c_6)n\ \forall n \geq max(n_1,n_2,n_3,1)
   \end{displaymath}
   
 \end{example}
@@ -220,7 +220,7 @@ Como isso temos que o tempo de execução em função do tamanho da entrada $n$ 
   Para tanto, utilizamos a notação $O$.
 
   \begin{displaymath}
-    O(g(n) := \{f(n) : \exists c, n_o \textrm{ tais que } 0 \leq f(n) \leq cg(n) \forall n \geq n_0 \}
+    O(g(n) := \{f(n) : \exists c, n_o \textrm{ tais que } 0 \leq f(n) \leq cg(n)\ \forall n \geq n_0 \}
   \end{displaymath}
 
   Sempre que $f(n) \in \Theta(g(n))$ temos que $f(n) \in O(g(n))$.
@@ -234,7 +234,7 @@ Como isso temos que o tempo de execução em função do tamanho da entrada $n$ 
     Para mostrar a segunda, note que:
 
     \begin{displaymath}
-     0 \leq n \leq n^2 \forall n \geq 1
+     0 \leq n \leq n^2 \textrm{ para todo } n \geq 1
     \end{displaymath}
   \end{example}
 
@@ -243,7 +243,7 @@ Como isso temos que o tempo de execução em função do tamanho da entrada $n$ 
   Nesses casos, dizemos que o problema é $\Omega(f(n))$.
 
   \begin{displaymath}
-    \Omega(g(n) := \{f(n) : \exists c, n_o \textrm{ tais que } 0 \leq cg(n) \leq f(n) \forall n \geq n_0 \}
+    \Omega(g(n) := \{f(n) : \exists c, n_o \textrm{ tais que } 0 \leq cg(n) \leq f(n)\ \forall n \geq n_0 \}
   \end{displaymath}
 
   Quando temos uma solução $O(g(n))$ para um problema $\Omega(g(n))$ dizemos que essa solução é {\em ótima}. 
