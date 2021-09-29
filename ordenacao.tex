@@ -5,6 +5,7 @@ Em primeiro lugar, ele é um problema com muitas aplicações em diversas áreas
 Em segundo lugar, são conhecidas diversas soluções bem diferentes para esse problema, o que o torna um excelente exemplo para a teoria que estamos apresentando.
 
 Vamos relembrar o problema:
+\vspace{1em}
 
   {\bf Problema da ordenação}\\
 
@@ -20,17 +21,16 @@ Vamos relembrar o problema:
   Assim, podemos começar com a seguinte sub-rotina:
 
   \begin{codebox}
-\Procname{$\proc{Maximo}(A)$}
-\li \Comment Recebe uma sequência $a_1, \dots, a_n$
-\li \Comment Devolve $i$ tal que $a_i$ é o maior elemento da sequência
-\li $imax \gets 0$
-\li \For $i \gets 2$ até $n$
-\li \Do \If $a_i > a_{imax}$
-\li     \Then $imax \gets i$
+    \Procname{$\proc{Maximo}(A)$}
+    \li \Comment Recebe uma sequência $a_1, \dots, a_n$
+    \li \Comment Devolve $i$ tal que $a_i$ é o maior elemento da sequência
+    \li $imax \gets 0$
+    \li \For $i \gets 2$ até $n$
+    \li \Do \If $a_i > a_{imax}$
+    \li     \Then $imax \gets i$
         \End
     \End
-\li \Return $imax$
-\End
+    \li \Return $imax$
   \end{codebox}
 
   Para provar que este algoritmo é correto, note que a seguinte propriedade é invariante na linha 2:
@@ -46,6 +46,8 @@ Vamos relembrar o problema:
 
   {\em Término:} quando chegamos na linha 5 temos que $a_{imax}$ é o maior elemento de $a_1, \dots, a_n$.
 
+  \vspace{1em}
+
   Analisar o tempo de processamento deste algoritmo também é simples.
   Para facilitar as contas, faremos mais uma simplificação.
   Ao invés de somar o tempo de processamento de cada linha, calcularemos o tempo apenas de uma das linhas que mais se repete, neste caso escolhemos a 3.
@@ -55,18 +57,16 @@ Vamos relembrar o problema:
 
   
   \begin{codebox}
-\Procname{$\proc{SelectionSort}(A)$}
-\li \For $j \gets n$ até $2$
-\li \Do $imax \gets Maximo(a[1:j])$
-\li     \Then $a_{imax} \leftrightarrow a_j$
+    \Procname{$\proc{SelectionSort}(A)$}
+    \li \For $j \gets n$ até $2$
+    \li \Do $imax \gets Maximo(a[1:j])$
+    \li     \Then $a_{imax} \leftrightarrow a_j$
         \End
-    \End
-\End
   \end{codebox}
 
   A propriedade invariante depois da linha 3, neste caso, é:
   \begin{center}
-    a sequência $a_j, \dots, a_n$ está em ordem crescente e $a_j$ é o maior elemento de $a_1, \dots a_j$
+    $a_j, \dots, a_n$ está em ordenada e $a_j$ é o maior elemento de $a_1, \dots, a_j$
   \end{center}
 
   {\em Inicialização:} Na primeira passagem temos que $j=n$ e, portanto a squência $a_j, \dots, a_n$ tem um único elemento $a_n$, além disso, pela correção do algoritmo $Maximo$, $a_n$ é o maior elemento da sequência $a_1, \dots, a_n$.
@@ -77,6 +77,8 @@ Vamos relembrar o problema:
   {\em Término:} Quando saimos do laço, $j=2$ e o invariante garante, portanto, que $a_2, \dots, a_n$ está ordenado.
   Além disso, ele garante que $a_2$ é o maior elemento da sequência $a_1, a_2$.
   Concluímos que ao término $a_1, \dots, a_n$ está ordenado.
+
+  \vspace{1em}
   
 
   Para analisar o tempo de processamento deste algoritmo, consideraremos a linha 2 que se repete $n$ vezes.
@@ -110,7 +112,55 @@ Vamos relembrar o problema:
   \end{figure}
 
   
-\section{Insertion Sort}
+  \section{Insertion Sort}
+
+  Nosso segundo algoritmo segue uma ideia também simples.
+  Ele ordena uma sequência de maneira análoga a forma como muitas pessoas ordenam cartas de baralhos nas mãos.
+
+  A princípio as cartas estão todas viradas para baixo.
+  Elas são inseridas uma por uma na mão do jogador cada qual em sua posição relativa correta.
+
+   \begin{codebox}
+     \Procname{$\proc{InsertionSort}(A)$}
+     \li \For $j \gets 2$ até $n$
+     \li $chave \gets a_j$
+     \li    \For $i \gets j-1$ até $1$
+     \li    \Do $a_{i+1} \gets a_i$
+     \li       \If $a_i > chave$
+     \li       \Then sai do laço
+               \End
+            \End
+     \li    $a_{i+1} \gets chave$
+     \End
+   \end{codebox}
+
+   Para provar a correção deste algoritmo, note que a seguinte propriedade é invariante na linha 2:
+
+   \begin{center}
+     a sequência $a_1, \dots, a_{j-1}$ está em ordem crescente
+   \end{center}
+
+   A análise do consumo de tempo é similar à do SelectionSort.
+   Uma diferença está no fato de que independente da entrada, o SelectionSort sempre processa todos elementos já o InsertionSort pode sair do laço interno precocemente.
+   Note então que, quando o pior caso ocorre quando os elementos originalmente estão em ordem descrescente.
+   Neste caso, a análise do consumo de tempo é idêntica à do SelectionSort:
+
+   \begin{displaymath}
+     T(n) = n + (n-1) + (n-2) + \dots + 2 = \sum_{i=2}^n = \frac{n(n+1)}{2} - 1 \in \Theta(n^2)
+   \end{displaymath}
+
+   Assim, no pior caso os algoritmos são identícos.
+   Veremos como analisar o caso médio na seção sobre o QuickSort, por ora basta dizer que ela também é $\Theta(n^2)$ neste caso, porém a constante multiplicadora é menor.
+   Isso fica evidente quando verificamos o modelo.
+   Plotando o tempo e processamento dos dois algoritmos que vimos até aqui em um mesmo gráfico com escala log nos dois eixos, vemos que ambos apresentamos uma reta praticamente com a mesma inclinação -- o primeiro tinha inclinação 1,94 e este 1,88.
+   A diferença é no fato de deslocamento vertical que indica uma diferença no fator multiplicador do termo dominante.
+   Essa diferença é significativa porque testamos o algoritmo com uma entrada aleatória e, nesse caso, o InsertionSort é um pouco mais eficiente:
+
+   
+  \begin{figure}
+    \includegraphics[width=\textwidth]{imagens/SelectionInsertion.png}
+  \end{figure}   
+  
 \section{Merge Sort}
 \section{Quick Sort}
 \section{Heap Sort}
