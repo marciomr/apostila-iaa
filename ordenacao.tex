@@ -306,9 +306,9 @@ O segredo está na combinação das instâncias menores para resolver a instânc
 Para este passo, usaremos um algoritmo de intercalação.
 
 Podemos enunciar o problema da intercalação da seguinte forma:
+\vspace{1em}
 
-
-{\bf Problema da busca}\\
+{\bf Problema da intercalação}\\
 
 {\bf Entrada:} Duas sequências $a_1, \dots, a_n$ e $b_1, \dots, b_m$ ambas em ordem crescente.
 
@@ -385,6 +385,23 @@ Como a altura dessa árvore também é $lg(n)$ temos que:
 \begin{displaymath}
   T(n) = 2.c_1.n.lg(n) + 2.n.c_2 \in \Theta(n.lg(n))
 \end{displaymath}
+
+Ambos os algoritmos de ordenação que vimos nas seções anteriores, selection sort e insertion sort, tomam tempo $\Theta(n^2)$ no pior caso.
+Comparado a esses, o merge sort é muito mais eficiente.
+Isso porque a função $lg(n)$ cresce muito mais devagar do que a função $n$.
+Na Figura \ref{fig:comp1} plotamos em um grafíco log-log o resultado de um experimento em que foi computado o tempo de processamento de sequências aleatórias para cada um três algoritmos.
+Para sequências de 100 mil elementos, o tempo de processamento dos algoritmos básicos tomou tempo próximo a 10 segundo e esse tempo aumentou para cerca de 100 segundos quando aumentamos o número de elementos para 300 mil.
+Já o tempo de processamento do merge sort variou próximo de 0,1 segundos.
+Além disso, note que as inclinações das retas nos dois primeiros casos é próxima de $2$.
+Como discutido anteriormente esse era o resultado esperado visto que os algoritmos tomam tempo $\Theta(n^2)$.
+A inclinação da reta que corresponde ao tempo de processamente do merge sort é menor, mais próxima de $1$ do que de $2$.
+
+\begin{figure}
+  \label{fig:comp1}
+  \includegraphics[width=\textwidth]{imagens/comparacao1.png}
+  \caption{Resultado de experimento para calcular o processamento dos algoritmos de ordenação vistos até agora em um gráfico log-log.}
+\end{figure}
+
 
 Agora que vimos como resolver três recorrências diferentes usando o método da árvore de recorrência, apresentaremos um resultado geral para resolver recorrências:
 
