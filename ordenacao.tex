@@ -162,5 +162,311 @@ Vamos relembrar o problema:
   \end{figure}   
   
 \section{Merge Sort}
+
+Antes de apresentar o próximo algoritmo, estudaremos um paradigma de projeto de algoritmos chamado {\em divisão-e-conquista} que consiste nos seguintes passos:
+
+\begin{itemize}
+  \item {\em Divisão:} a instância original do problema é dividida em um número de instâncias menores.
+  \item {\em Conquista:} instâncias suficientemente pequenas são resolvidas diretamente.
+    \item {\em Combinação:} se necessário, as soluções das instâncias menores são combinadas em para resolver a instância original.
+\end{itemize}
+
+Para exemplificar o paradigma, revisitaremos o algoritmo da busca binária em uma versão recursiva.
+
+\begin{codebox}
+  \li \Comment recebe uma sequência ordenada $a_1, \dots, a_n$ e um valor $b$
+  \li \Comment devolve V se $b$ está na sequência e F c.c.
+  \Procname{$\proc{BuscaBinaria}(A, b)$}
+  \li \If $n = 1$
+  \li \Then \If $a_1 = b$
+  \li \Then \Return V
+  \End
+  \li \Else
+  \li \Return F
+  \End 
+  \li $m \gets \left \lfloor{\frac{n}{2}}\right\rfloor$
+  \li \If $b \leq a_m$
+  \li     \Then \Return $BuscaBinaria(A[1:m])$
+  \End
+  \li \Else \Return $BuscaBinaria(A[m+1:n])$
+  \End
+\end{codebox}
+
+As linhas 1 a 5 resolvem o caso base ({\em conquista}) enquanto as linhas 6 a 10 dividem o problema em instâncias menores.
+Neste caso, não há necessidade de combinar as soluções pois a cada passo, metade da instância original pode ser ignorada.
+
+Para analisar o tempo de processamento deste algoritmo primeiro estabelecemos que as linhas 1 a 5 tomas tempo constante ($c_2$), assim comas as linhas 6, 7 e 9 ($c_1$).
+Jás as linhas 8 e 10 são chamadas recursivas.
+Assim, o tempo de processamento do pior caso em função do tamanho da entrada $n$ é descrito pela seguinte recorrência:
+
+\begin{eqnarray*}
+  T(n) & = & c_1 + T(\left \lceil{\frac{n}{2}}\right \rceil) \\
+  T(1) & = & c_2
+\end{eqnarray*}
+
+Resolveremos essa recorrência utilizando o método da árvore de recorrência:
+
+% Árvore de recorrência
+\begin{center}
+\begin{tikzpicture}
+\node {$T(n)$}[sibling distance = 6cm]
+child {node {$T(\frac{n}{2}) + c_1$}[sibling distance = 3cm] 
+  child {node {$T(\frac{n}{4}) + c_1$}
+    child {node {$T(\frac{n}{2^i}) + c_1$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1$} 
+        child {node {$c_2$} edge from parent [solid]}}}}};
+\end{tikzpicture}
+\end{center}
+
+A árvore chega no caso base $T(1)$ quando $2^i = n$, ou seja, quando $i = lg(n)$.
+Portanto, a altura da árvore é $lg(n)$.
+Em cada passo, é somado $c_1$ e no último é somado $c_2$.
+Concluímos que:
+
+\begin{displaymath}
+  T(n) = c_1.lg(n) + c_2
+\end{displaymath}
+
+
+Talvez um exemplo melhor do paradigma da divisão-e-conquista seja um versão do algoritmo de busca para sequências arbitrárias.
+Dividiremos a sequência ao meio, mas neste caso, é preciso buscar nas duas metades dela.
+Por fim, precisamos combinar os resultados.
+O elemento $b$ está na sequência se ele está na metade direita ou na metade esquerda.
+
+\begin{codebox}
+  \li \Comment recebe uma sequência $a_1, \dots, a_n$ e um valor $b$
+  \li \Comment devolve V se $b$ está na sequência e F c.c.
+  \Procname{$\proc{BuscaRecursiva}(A, b)$}
+  \li \If $n = 1$
+  \li \Then \If $a_1 = b$
+  \li \Then \Return V
+  \End
+  \li \Else
+  \li \Return F
+  \End 
+  \li $m \gets \left \lfloor{\frac{n}{2}}\right\rfloor$
+  \li \Return $BuscaRecursiva(A[1:m])$ ou $BuscaRecursiva(A[m+1:n])$
+  \End
+\end{codebox}
+
+Como no exemplo anterior, o caso base (linhas 3 a 7) toma tempo constante $c_2$ e as operações de divisão, atribuição e o ou lógico (linhas 8 e 9) também tomam tempo constante $c_2$.
+Desta vez, porém, a recursão é aplicada nas duas metades da sequência.
+Assim, a recorrência que devemos resolver é:
+
+\begin{eqnarray*}
+  T(n) & = & c_1 + T(\left \lceil{\frac{n}{2}}\right \rceil) + T(\left \lfloor{\frac{n}{2}}\right \rfloor)\\
+  T(1) & = & c_2
+\end{eqnarray*}
+
+Para calcular o resultado dessa recorrência, vamos novamente analisar sua árvore:
+
+% Árvore de recorrência
+\begin{center}
+\begin{tikzpicture}
+\node {$T(n)$}[sibling distance = 6cm]
+child {node {$T(\frac{n}{2}) + c_1$}[sibling distance = 3cm]
+  child {node {$T(\frac{n}{4}) + c_1$}
+    child {node {$T(\frac{n}{2^i}) + c_1$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1$} 
+        child {node {$c_2$} edge from parent [solid]}}}}
+  child {node {$T(\frac{n}{4}) + c_1$}
+    child {node {$T(\frac{n}{2^i}) + c_1$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1$} 
+        child {node {$c_2$} edge from parent [solid]}}}}}
+child {node {$T(\frac{n}{2}) + c_1$}[sibling distance = 3cm] 
+  child {node {$T(\frac{n}{4}) + c_1$}
+    child {node {$T(\frac{n}{2^i}) + c_1$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1$} 
+        child {node {$c_2$} edge from parent [solid]}}}}
+  child {node {$T(\frac{n}{4}) + c_1$}
+    child {node {$T(\frac{n}{2^i}) + c_1$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1$} 
+        child {node {$c_2$} edge from parent [solid]}}}}};
+\end{tikzpicture}
+\end{center}
+
+Como no caso anterior, essa árvore chega às folhas quando $2^i = n$, ou seja, quando $i = lg(n)$.
+Portanto, a altura dela é $lg(n)$.
+Em cada nível dessa árvore dobramos a quantidade de $c_1$ somadas.
+Assim, no i-ésimo nível são somados $2^i$ constantes e no último são somados $2^{lg(n)} = n$ constantes.
+Portanto, o resultado de nossa recorrência é:
+
+\begin{eqnarray*}
+  T(n) & = & c_1.\sum_{i=1}^{lg(n)}2^i + c_2.n\\
+  & = & c_1.\frac{1 - 2^{lg(n)}}{1-2} + c_2.n \\
+  & = & c_1.(n-1) + c_2.n \\
+  & = & (c_1 + c_2).n - c_1 \\
+  & \in & \Theta(n)
+\end{eqnarray*}
+
+O merge sort, ou algoritmo de ordenação por intercalação, também segue o paradigma da divisão-e-conquista.
+A ideia é quebrar a instância original ao meio até que ela tenha apenas um elemento.
+Neste caso, o caso base, não é preciso fazer nada pois qualquer sequência com um único elemento está trivialmente ordenada.
+O segredo está na combinação das instâncias menores para resolver a instância original.
+Para este passo, usaremos um algoritmo de intercalação.
+
+Podemos enunciar o problema da intercalação da seguinte forma:
+
+
+{\bf Problema da busca}\\
+
+{\bf Entrada:} Duas sequências $a_1, \dots, a_n$ e $b_1, \dots, b_m$ ambas em ordem crescente.
+
+{\bf Saída:} Uma sequência $c_1, \dots, c_{m+n}$ em ordem crescente cujos elementos são os mesmos das sequências da entrada.
+
+Para resolver esse problema utilizamos o seguinte algoritmo:
+
+\begin{codebox}
+  \Procname{$\proc{Merge}(A, B)$}
+  \li $i \gets 1$
+  \li $j \gets 1$
+  \li \For $k \gets 1$ até $n+m$
+  \li \Do \If ($a_i \leq b_j$ e $i \leq n$) ou $j > m$
+  \li \Then $c_k \gets a_i$
+  \li $i \gets i + 1$
+  \li \Else
+  \li $c_k \gets b_j$
+  \li $j \gets j + 1$
+  \End
+  \End
+  \li \Return $C$
+\end{codebox}
+
+Com isso, podemos escrever o algoritmo de ordenação da seguinte forma:
+
+\begin{codebox}
+  \Procname{$\proc{MergeSort}(A, B)$}
+  \li \If $n > 1$
+  \li \Then  $m \gets \left \lfloor{\frac{n}{2}}\right\rfloor$
+  \li $MergeSort(A[1:m])$
+  \li $MergeSort(A[m+1:n])$
+  \li $A \gets Merge(A[1:m], A[m+1:n])$
+\end{codebox}
+
+O caso base do algoritmo ocorre quando $n = 1$.
+Neste caso, nada precisa ser feito e o tempo tomado é constante $c$.
+Já a linha 4 toma tempo linear no tamanho da entrada $n$.
+Com isso, temos que o tempo de execução do algoritmo em função de $n$ é:
+
+\begin{eqnarray*}
+  T(n) & = & c_1.n + T(\left \lfloor{\frac{n}{2}}\right\rfloor) + T(\left \lceil{\frac{n}{2}}\right\rceil)\\
+  T(1) & = & c_2
+\end{eqnarray*}
+
+Analisaremos, então a seguinte árvore de recorrência:
+
+% Árvore de recorrência
+\begin{center}
+\begin{tikzpicture}
+\node {$T(n)$}[sibling distance = 6cm]
+child {node {$T(\frac{n}{2}) + c_1.n$}[sibling distance = 3cm]
+  child {node {$T(\frac{n}{4}) + c_1.\frac{n}{2}$}
+    child {node {$T(\frac{n}{2^i}) + c_1.\frac{n}{2^{i-1}}$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1.2$} 
+        child {node {$c_2$} edge from parent [solid]}}}}
+  child {node {$T(\frac{n}{4}) + c_1.\frac{n}{2}$}
+    child {node {$T(\frac{n}{2^i}) + c_1.\frac{n}{2^{i-1}}$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1.2$} 
+        child {node {$c_2$} edge from parent [solid]}}}}}
+child {node {$T(\frac{n}{2}) + c_1.n$}[sibling distance = 3cm] 
+  child {node {$T(\frac{n}{4}) + c_1.\frac{n}{2}$}
+    child {node {$T(\frac{n}{2^i}) + c_1.\frac{n}{2^{i-1}}$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1.2$} 
+        child {node {$c_2$} edge from parent [solid]}}}}
+  child {node {$T(\frac{n}{4}) + c_1.\frac{n}{2}$}
+    child {node {$T(\frac{n}{2^i}) + c_1.\frac{n}{2^{i-1}}$} edge from parent [dashed]
+      child {node {$T(\frac{n}{n}) + c_1.2$} 
+        child {node {$c_2$} edge from parent [solid]}}}}};
+\end{tikzpicture}
+\end{center}
+
+Em cada nível da árvore, é somado $2.c_1.n$.
+Como a altura dessa árvore também é $lg(n)$ temos que:
+\begin{displaymath}
+  T(n) = 2.c_1.n.lg(n) + 2.n.c_2 \in \Theta(n.lg(n))
+\end{displaymath}
+
+Agora que vimos como resolver três recorrências diferentes usando o método da árvore de recorrência, apresentaremos um resultado geral para resolver recorrências:
+
+\begin{theorem}[Mestre]
+  Sejam $a \geq 1$, $b > 1$ e $T(n) = aT(\frac{n}{b}) + f(n)$, então:
+  \begin{enumerate}
+  \item se $f(n) \in O(n^{log_b(a - \epsilon)})$ para algum $\epsilon > 0$ então $T(n) \in \Theta(n^{log_ba})$
+  \item se $f(n) \in \Theta(n^{log_ba})$ então $T(n) \in \Theta(n^{log_ba}lg(n))$
+  \item se $f(n) \in O(n^{log_b(a + \epsilon)})$ para algum $\epsilon > 0$ e se $af(\frac{n}{b}) \leq cf(n)$ para algum $c < 1$ e todo $n$ suficientemente grande então $T(n) \in \Theta(f(n))$
+  \end{enumerate}
+\end{theorem}
+
+\begin{example}
+  Comecemos pela recorrência que acabamos de analisar
+  \begin{displaymath}
+    T(n) = 2T\left(\frac{n}{2}\right) + cn
+  \end{displaymath}
+
+  O primeiro passo é avaliar $n^{log_ba}$ que neste caso é $n^{log_22} = n$.
+  Então temos que verificar se $f(n) = cn \in \Theta(n)$.
+  Neste caso, isso vale.
+  Portante se aplica o caso 2 do teorema e temos que:
+
+  \begin{displaymath}
+    T(n) \in \Theta(n^{log_22}.lg(n)) = \Theta(n.lg(n))
+  \end{displaymath}
+\end{example}
+
+\begin{example}
+  Considere a recorrência que obtivemos ao analisar a busca binária:
+  \begin{displaymath}
+    T(n) = T\left(\frac{n}{2}\right) + c
+  \end{displaymath}
+
+  O primeiro passo é avaliar $n^{log_ba}$ que neste caso é $n^{log_21} = n^0 = 1$.
+  Então temos que verificar se $f(n) = c \in \Theta(1)$.
+  Neste caso, isso vale.
+  Portante se aplica o caso 2 do teorema e temos que:
+
+  \begin{displaymath}
+    T(n) \in \Theta(n^{log_21}.lg(n)) = \Theta(1.lg(n)) = \Theta(lg(n))
+  \end{displaymath}
+\end{example}
+
+
+\begin{example}
+  Considere agora a recorrência que obtivemos ao analisar a busca recursiva:
+  \begin{displaymath}
+    T(n) = 2T\left(\frac{n}{2}\right) + c
+  \end{displaymath}
+
+  Primeiro avaliamos $n^{log_22} = n$.
+  Então temos que verificar se $f(n) = c \in \Theta(n)$.
+  Neste caso, isso não é verdade $c$ cresce mais lentamente do que $n$.
+  
+  Se  $\epsilon = 1$ temos que $n^{log_2(2-1)} = n^0 = 1$ e $c \in O(1)$.
+  Portanto podemos aplicar o caso 1 do teorema e temos que:
+
+  \begin{displaymath}
+    T(n) \in \Theta(n^{log_22} = \Theta(n^1) = \Theta(n)
+  \end{displaymath}
+\end{example}
+
+\begin{example}
+  Para terminar, considera a seguinte recorrência:
+  \begin{displaymath}
+    T(n) = 2T\left(\frac{n}{2}\right) + n^2
+  \end{displaymath}
+
+  Primeiro avaliamos $n^{log_22} = n$.
+  Então temos que verificar se $f(n) = n^2 \in \Theta(n)$.
+  Neste caso, isso não é verdade $n²$ cresce mais rapidamente do que $n$.
+  
+  Se $\epsilon = 2$ temos que $n^{log_2(2+2)} = n^2$ e $n^2 \in \Omega(n^2)$ e $2(\frac{n}{2})^2 = \frac{n^2}{2} \leq \frac{1}{2}.n^2$ para todo $n > 0$.  
+  Portanto podemos aplicar o caso 3 do teorema e temos que:
+
+  \begin{displaymath}
+    T(n) \in \Theta(f(n)) = \Theta(n^2)
+  \end{displaymath}
+\end{example}
+
+
+
 \section{Quick Sort}
 \section{Heap Sort}

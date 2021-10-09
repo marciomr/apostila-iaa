@@ -25,7 +25,7 @@
 
   {\bf Saída:} A quantidade de $i$s, $j$s e $k$s tais que $a_i + b_j + c_j = 0$.
 
-  \vspace{2cm}
+  \vspace{0.5cm}
   
 \begin{exercicio}
 
@@ -45,14 +45,6 @@
   \li \Return $m$
 \end{codebox}
 
-Prove que este algoritmo resolve o problema da 3-soma, ou seja, que ele é correto.
-  
-\end{exercicio}
-
-\newpage
-
-\begin{exercicio}
-Considere o seguinte algoritmo $3Soma$ apresnetado no final do capítulo anterior.
 Calcule o tempo de processamento em função do tamanho $n$ da entrada assumindo que:
 
 \begin{itemize}
@@ -60,19 +52,44 @@ Calcule o tempo de processamento em função do tamanho $n$ da entrada assumindo
 \item Cada atribuição toma tempo constante $c_2$
 \item Cada soma toma tempo constante $c_3$
 \item A saída toma tempo constante $c_4$
+\item Cada comparação toma tempo constante $c_5$
 \end{itemize}
   
 \end{exercicio}
 
 
 \begin{exercicio}
-  Mostre que o tempo de processamento do algorítimo $3Soma$ é $\Theta(n^3)$ no pior caso.
+  Mostre que o tempo de processamento do algoritmo $3Soma$ é $\Theta(n^3)$ no pior caso.
 \end{exercicio}
 
 
 \begin{exercicio}
   Descreva em pseudo-código um algoritmo cujo tempo de processamento no pior caso é $\Theta(n^2log(n))$.
   Dica: ordene a sequência $c_1, \dots, c_n$ usando qualquer um dos métodos visto em aula e use a busca binária.
+\end{exercicio}
+
+\begin{exercicio}
+  Considere agora o seguinte algoritmo de ordenação:
+
+  \begin{codebox}
+    \li \Comment Recebe uma sequência $a_1, \dots, a_n$
+    \li \Comment Reordena a sequência de forma que seus elementos fiquem em ordem crescente
+  \Procname{$\proc{BubbleSort}(A)$}
+  \li \For $i \gets 1$ até $n$
+  \li \Do \For $j \gets n$ até $i+1$
+  \li     \If $a_j < a_{j-1}$
+  \li         \Then $a_j \leftrightarrow a_{j-1}$
+  \End
+  \End
+  \End
+  \end{codebox}
+
+  Mostre que este algoritmo é correto, ou seja, que ele resolve o problema da ordenação.
+
+\end{exercicio}
+
+\begin{exercicio}
+  {\bf (Extra)} Mostre que o algoritmo da 3Soma apresentado no exercício 1 é correto.
 \end{exercicio}
 
 \end{document}
