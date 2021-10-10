@@ -1,0 +1,141 @@
+% -*- coding: utf-8 -*-
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Criado por Márcio Moretto Ribeiro
+%% 
+%% Última modificação 16/10/2008
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Para usar adicione um link para esse arquivo no diretório que 
+%% contém o arquivo .tex
+%%
+%% No arquivo .tex coloque a linha \usepackage[option]
+%%
+%% Obs.: alguma das 2 opções TEM que ser excolhidas: portuges ou
+%% english 
+
+\usepackage{float}
+\usepackage{mathrsfs}
+\usepackage{amsfonts,amsmath,amssymb,amsthm}
+
+%% Textos em inglês
+\DeclareOption{english}{
+  %% Teoremas 
+  \newtheorem{theorem}{Theorem}[section]
+  \newtheorem{definition}[theorem]{Definition}
+  \newtheorem{representation}[theorem]{Representation Theorem}
+  \newtheorem{corollary}[theorem]{Corollary}
+  \newtheorem{proposition}[theorem]{Proposition}
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{observation}[theorem]{Observation}
+  \newtheorem{conjecture}[theorem]{Conjecture}
+
+  %% Prova
+%  \newenvironment{proof}{{\bf Proof:}}{\cqd\medskip}
+
+  %% Exemplo
+%  \newcounter{example}
+  \newenvironment{example}{\refstepcounter{theorem}
+    \medskip
+    {\bf Example~\thetheorem: }\begin{quote}\rmfamily}{\end{quote}\medskip}
+
+  \newenvironment{example*}{
+    \begin{quote}{\bf Example: }     
+      \rmfamily}{\end{quote}\medskip}
+
+  %% Algoritmo
+  \floatstyle{ruled}
+  \newfloat{algorithm}{ht}{lop}[section]
+  \floatname{algorithm}{Algorithm}
+  \newcommand{\listofalgorithms}{\listof{algorithm}{List of Algorithms}}
+}
+
+%% Textos em portugues
+\DeclareOption{portugues}{
+  %% Teoremas
+  \newtheorem{theorem}{Teorema}[section]
+  \newtheorem{definition}[theorem]{Definição}
+  \newtheorem{representation}[theorem]{Teorema de Representação}
+  \newtheorem{corollary}[theorem]{Corolario}
+  \newtheorem{proposition}[theorem]{Proposição}
+  \newtheorem{lemma}[theorem]{Lema}
+  \newtheorem{observation}[theorem]{Observação}
+
+  %% Prova
+%  \newenvironment{proof}{\paragraph{Prova:}}{\cqd\medskip}
+
+  %% Exemplo
+%   \newcounter{example}
+ \newenvironment{example}{\refstepcounter{theorem}
+   \medskip
+    {\bf Exemplo~\thetheorem: }\begin{quote}
+      \rmfamily}{\end{quote}\medskip}
+
+  %% Algoritmo
+  \floatstyle{ruled}
+  \newfloat{algorithm}{ht}{lop}[section]
+  \floatname{algorithm}{Algoritimo}
+  \newcommand{\listofalgorithms}{\listof{algorithm}{Lista de Algoritmos}}
+}
+
+%% Definições que não precisam de opção
+\ProcessOptions\relax
+
+%% Enviroments
+\newenvironment{postulate}[1]{\medskip{\bf (#1)}}{\medskip}
+\newenvironment{property}[1]{\begin{description}\item {\em #1}:}
+  {\end{description}}
+
+%% Símbolos
+\newcommand{\remainder}{\perp}
+\newcommand{\diagnostic}{\;\text{\rotatebox{90}{$\Vdash$}}\;}
+\newcommand{\falsum}{\bot}
+\newcommand{\cqd}{\hfill$\Box$}
+\newcommand{\kernel}{{\mbox{$\;\perp\!\!\!\perp\,$}}}
+\newcommand{\kdown}{{\mbox{$\;\downarrow\!\!\!\!\!\downarrow\;$}}}
+%\newcommand{\nsqsubseteq}{{\mbox{$\;/\!\!\!\!\!\sqsubseteq$~}}}
+%\newcommand{\transsqsubseteq}{{\mbox{$\;*\!\!\!\!\!\!\sqsubseteq$}}}
+\newcommand{\transsqsubseteq}{{\mbox{$\widetilde{\sqsubseteq}$}}}
+\newcommand{\package}{\stackrel{\forall}{-}}
+\newcommand{\choice}{\stackrel{\exists}{-}}
+
+\newcommand{\braquet}[1]{\mbox{$\langle #1 \rangle$}}
+\newcommand{\logic}{\braquet{\L, Cn}} %% <L,Cn>
+%\newcommand{\logic}{\mbox{$\langle \L, Cn \rangle$}~} %% <L,Cn>
+
+%% Palavras Chaves: enfatiza e põe no índice
+\newcommand{\keyword}[1]{\emph{#1}\index{#1}}
+\newcommand{\keywords}[2]{\emph{#1}\index{#2}}
+
+%% Letras estilizadas
+\newcommand{\I}{\mathcal{I}} %% interpretação
+\newcommand{\R}{\mathscr{R}} %% conjunto dos papeis
+\newcommand{\K}{K} %% conjunto de crença
+\newcommand{\B}{B} %% base de crença
+\newcommand{\A}{A} %% conjunto de sentenças
+\newcommand{\KB}{\mathbf{KB}} %% base de conhecimento
+\renewcommand{\L}{\mathscr{L}} %% Linguagem
+\newcommand{\D}{\textbf{D}} %% D de datatypes
+
+%% Nome das DLs
+\newcommand{\DL}[1]{$\mathcal{#1}$}
+
+\newcommand{\SHIFD}{$\mathcal{SHIF}$($\D$)}
+\newcommand{\SHOIND}{$\mathcal{SHOIN}$($\D$)}
+\newcommand{\SHOIQD}{$\mathcal{SHOIQ}$($\D$)}
+\newcommand{\AL}{$\mathcal{AL}$}
+\newcommand{\ALC}{$\mathcal{ALC}$}
+\newcommand{\ALN}{$\mathcal{ALN}$}
+\newcommand{\ALCI}{$\mathcal{ALCI}$}
+\newcommand{\FLminus}{$\mathcal{FL}^-$}
+\newcommand{\FL}{$\mathcal{FL}$}
+\newcommand{\EL}{$\mathcal{EL}$}
+\newcommand{\DLlite}{$\mathcal{DL}-\mathcal{L}ite$}
+
+%% Abreviações
+
+\newcommand{\TELL}{\mbox{\tt TELL}~}
+\newcommand{\ASK}{\mbox{\tt ASK}~}
+\newcommand{\FORGET}{\mbox{\tt FORGET}~}
