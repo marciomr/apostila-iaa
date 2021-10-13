@@ -123,7 +123,7 @@ Vamos relembrar o problema:
    \begin{codebox}
      \Procname{$\proc{InsertionSort}(A)$}
      \li \For $j \gets 2$ até $n$
-     \li $chave \gets a_j$
+     \li \Do $chave \gets a_j$
      \li    \For $i \gets j-1$ até $1$
      \li    \Do $a_{i+1} \gets a_i$
      \li       \If $a_i > chave$
@@ -335,7 +335,7 @@ Para resolver esse problema utilizamos o seguinte algoritmo:
 Com isso, podemos escrever o algoritmo de ordenação da seguinte forma:
 
 \begin{codebox}
-  \Procname{$\proc{MergeSort}(A, B)$}
+  \Procname{$\proc{MergeSort}(A)$}
   \li \If $n > 1$
   \li \Then  $m \gets \left \lfloor{\frac{n}{2}}\right\rfloor$
   \li $MergeSort(A[1:m])$
@@ -410,7 +410,7 @@ Agora que vimos como resolver três recorrências diferentes usando o método da
   \begin{enumerate}
   \item se $f(n) \in O(n^{log_b(a - \epsilon)})$ para algum $\epsilon > 0$ então $T(n) \in \Theta(n^{log_ba})$
   \item se $f(n) \in \Theta(n^{log_ba})$ então $T(n) \in \Theta(n^{log_ba}lg(n))$
-  \item se $f(n) \in O(n^{log_b(a + \epsilon)})$ para algum $\epsilon > 0$ e se $af(\frac{n}{b}) \leq cf(n)$ para algum $c < 1$ e todo $n$ suficientemente grande então $T(n) \in \Theta(f(n))$
+  \item se $f(n) \in \Omega(n^{log_b(a + \epsilon)})$ para algum $\epsilon > 0$ e se $af(\frac{n}{b}) \leq cf(n)$ para algum $c < 1$ e todo $n$ suficientemente grande então $T(n) \in \Theta(f(n))$
   \end{enumerate}
 \end{theorem}
 
@@ -484,6 +484,284 @@ Agora que vimos como resolver três recorrências diferentes usando o método da
 \end{example}
 
 
-
 \section{Quick Sort}
+
+O quick-sort é um algortimo eficiente e de simples implementação características que o tornou o mais popular dos algoritmos de ordenação presente nas bibliotecas padrão da grande maioria das linguagens de programação.
+
+Como o merge-sort, ele segue o paradigma divisão-e-conquista.
+Enquando o ``segredo'' do mege-sort está na fase de combinação com o algortimo de intercalação, o segredo do quick-sort está na fase de divisão.
+
+Ao invés de dividir a instância sempre ao meio, o quick-sort rearranja os elementos de forma a particioná-lo em dois pedaços.
+Na primeira partição todos elementos são menores do que um certo elemento chamado {\em pivo} e na segunda partição todos elementos são maiores do que ele.
+A divisão então, é feita na posição do pivô.
+
+\vspace{1em}
+{\bf Problema da partição}\\
+
+{\bf Entrada:} Uma sequência $a_1, \dots, a_n$.
+
+{\bf Saída:} Um índice $q$ e uma permutação $a_1', \dots, a_q, \dots, a_n'$ da sequência e forma que $a_i' \leq a_q'$ se $i < q$ e $a_q' \leq a_j'$ se $q < j$.
+
+O seguinte algoritmo resolve esse problema:
+
+\begin{codebox}
+  \Procname{$\proc{Particao}(A)$}
+  \li $pivo \gets a_n$
+  \li $i \gets -1$
+  \li \For $j \gets 1$ até $n$
+  \li \Do \If $a_j \leq pivo$ 
+  \li \Then $i \gets i+1$
+  \li $a_i \leftrightarrow a_j$
+  \End
+  \End
+  \li $a_{i+1} \gets a_j$
+  \li \Return $i+1$
+\end{codebox}
+
+Para a prova da correção note que na linha 4 a seguinte propriedade é invariante:
+
+\begin{center}
+  $a_k \leq pivo$ para todo $k$ tal que $k \leq i$ e \\
+  $a_k > pivo$ para todo $k$ tal que $i < k \leq j$. 
+\end{center}
+
+O tempo de processamento desse algoritmo é $\Theta(n)$ tanto no melhor quando no pior caso.
+
+Como antecipado, o quick-sort é um algoritmo de ordenação baseado em divisão-e-conquista que utiliza do algoritmo da partição para estabelece o ponto em que a instância será dividida.
+
+\begin{codebox}
+  \Procname{$\proc{QuickSort}(A)$}
+  \li \If $n > 0$
+  \li \Then  $q \gets Particao(A)$
+  \li $QuickSort(A[1:q-1])$
+  \li $QuickSort(A[q+1:n])$
+\end{codebox}
+
+O tempo de processamento do quick-sort depende dos valores de $q$, que, por sua vez, dependem da ordem original dos elementos.
+O melhor caso ocorre quando $q = \frac{n}{2}$, ou seja, quand o arranjo é sempre dividido ao meio.
+Neste caso, a recorrência que descreve o tempo de processamento do algoritmo é a mesma do merge-sort:
+
+\begin{displaymath}
+  T(n) = 2T\left( \frac{n}{2}\right) + \Theta(n)
+\end{displaymath}
+
+Usando o teorema mestre, temos que:
+\begin{displaymath}
+ T(n) \in \Theta(n.lg(n))
+\end{displaymath}
+
+Já o pior caso ocorre quado sempre dividimos a sequência da maneira mais desigual possível.
+Isso acontece se originalmente a sequência já está toda em ordem crescente ou toda em ordem decrescente.
+Nesses casos, a recorrência que descreve o tempo de processamento é:
+
+\begin{eqnarray*}
+  T(1) & = &  c\\
+  T(n) & = & T(n-1) + T(1) + \Theta(n)\\
+  & = & T(n-1) + c + \Theta(n)\\
+  & = & T(n-1) + \Theta(n)\\
+\end{eqnarray*}
+
+Esta recorrência não pode ser resolvida usando o teorema mestre, portanto, voltaremos a usar o método da árvore.
+
+% Árvore de recorrência
+\begin{center}
+\begin{tikzpicture}
+\node {$T(n)$}
+child {node {$T(n-1) + c_1.n$}
+  child {node {$T(n-2) + c_1.(n-1)$}
+    child {node {$T(n - i) + c_1.(n - i)$} edge from parent [dashed]
+      child {node {$T(1) + c_1$} 
+        child {node {$c_2$} edge from parent [solid]}}}}};
+\end{tikzpicture}
+\end{center}
+
+Temos, portanto, que:
+
+\begin{eqnarray*}
+  T(n) & = & c_1(n + (n-1) + (n-2) + \dots + 1) + c_2 \\
+  & = & c_1 \sum_{i=1}^n i + c_2 \\
+  & = & c_1.\frac{n(n+1)}{2} + c_2\\
+  & \in & \Theta(n^2)
+\end{eqnarray*}
+
+Vamos agora estudar o caso médio do quick-sort, mas antes disso, vale a pena estudar um pouco sobre casos médios em geral.
+
+\subsection{Análise de Caso Médio}
+
+Uma {\em variável aleatória} é uma função que associa cada evento de um espaço amostral $\Omega$ a um número real $X: \Omega \to \mathbb{R}$.
+
+Definimos o evento $X = x$ como ${\omega \in \Omega : X(\omega) = x}$ e esrevemos $Pr[X=x] = \sum_{\omega \in \Omega : X(\omega) = x}Pr(\omega)$.
+
+O {\em valor esperado}, ou {\em esperança}, de uma variável aleatória é definida como:
+
+\begin{displaymath}
+  E[X] = \sum_i x_i.Pr[X = x_i]
+\end{displaymath}
+
+\begin{example}
+  Seja $X$ uma variável aleatória que associa cada face de um dado ao seu valor.
+
+  \begin{displaymath}
+    E[X] = \sum_{i=1}^6 i.Pr[X = i]
+  \end{displaymath}
+
+  Supondo que o dados seja justo, ou seja, que a probabildade de cada valor é igual, temos que:
+\begin{displaymath}
+    E[X] = \frac{1}{6}.\sum_{i=1}^6 i = \frac{21}{6} = 3,5
+  \end{displaymath}
+  
+\end{example}
+
+A experança satisfaz a propriedade da {\em linearidade}, ou seja:
+
+\begin{displaymath}
+  E[aX + bY] = aE[X] + bE[Y]
+\end{displaymath}
+
+Agora considere um evento $A$.
+A {\em variável indicadora} $I\{A\}$ é dada por:
+
+\begin{displaymath}
+  I\{A\} = \left\{ \begin{array}{cl}
+                   1 & {\textrm se\ A\ ocorre}\\
+                   0 & {\textrm caso\ contrario}
+                   \end{array}\right.
+\end{displaymath}
+
+\begin{lemma}
+  Dado um espaço amostral $\Omega$ e um evento $A \subseteq \Omega$ e seja $X_A = I\{A\}$ então $E[X_A] = Pr[A]$.
+\end{lemma}
+\begin{proof}
+  \begin{eqnarray*}
+    E[X_A] & = & E[I\{A\}]\\
+    & = & 1.Pr[A] + 0.Pr[\Omega \setminus A]\\
+    & = & Pr[A] \\
+  \end{eqnarray*}
+\end{proof}
+
+\begin{example}
+  Seja $X$ uma variável aleatória que devolve o número de caras em três arremessos de moedas justas e seja $X_H$ o evento cara em um arremesso.
+\begin{displaymath}
+  I\{X_H\} = \left\{ \begin{array}{cl}
+                   1 & {\textrm se\ deu\ cara}\\
+                   0 & {\textrm se\ deu\ coroa}
+                   \end{array}\right.
+\end{displaymath}
+
+\begin{eqnarray*}
+  E[X] & = & E\left[\sum_{i=1}^3I\{X_H\}\right] \\
+  & = & \sum_{i=1}^3E[I\{X_H\}]\\
+  & = & \sum_{i=1}^3 Pr[X_H] = \frac{3}{2}
+\end{eqnarray*}
+
+\end{example}
+
+Calcular o tempo de processamento de um algoritmo no caso médio consiste em calcular o valor esparedo de $T(n)$ para uma certa distribuição de probabilidade da entrada de tamanho $n$.
+
+\begin{example}
+  Considere o algoritmo de busca sequêncial que já vimos anteriormente:
+
+  \begin{codebox}
+    \Procname{$\proc{BuscaSequencial}(A, b)$}
+    \li \For $i \gets 1$ até $n$
+    \li \Do \If $a_i = b$
+    \li     \Then \Return $i$
+        \End
+    \End
+    \li \Return $\bot$
+  \end{codebox}
+
+
+O número de vezes que a comparação na linha 2 é executado domina o valor de $T(n)$.
+Note que ele varia dependendo não apenas do tamanho da entrada, mas da ordem dos valores em $A$.
+Quando $b$ é encontrado, o laço é quebrado e o número de comparações cessa.
+Assim, por exemplo, no melhor caso, $a_1 = b$ e o algoritmo é executado em tempo $\Theta(1)$.
+
+Seja $X$ o número de vezes que a comparação da linha 2 é executada e seja $X_i = I\{$ na i-esima iteracao a comparação é executada $\}$.
+Queremos calcular $E[X]$.
+Para isso, vamos supor que $b$ ocorre na sequência e que ele ocorre com a mesma probabilidade em qualquer uma das posições.
+Assim temos que:
+
+\begin{eqnarray*}
+  E[X] & = & E\left[\sum_{i=1}^nI\{X_i\}\right] \\
+  & = & \sum_{i=1}^nE[I\{X_i\}]\\
+  & = & \sum_{i=1}^n Pr[X_i]
+\end{eqnarray*}
+
+Para calcular $Pr[X_i]$ note que a i-esima comparação será executada se e somente se $b$ ocorre antes de $i$.
+Temos então que $Pr[X_i] = \frac{n-i}{n} = 1 - \frac{i}{n}$.
+Finalmente podemos calcular:
+
+\begin{eqnarray*}
+  E[X] & = & \sum_{i=1}^n Pr[X_i] \\
+  & = & \sum_{i=1}^n \left(1 - \frac{i}{n} \right)\\
+  & = & n - \frac{1}{n}. \sum_{i=1}^ni\\
+  & = & n - \frac{n(n+1)}{2.n}\\
+  & = & \frac{n+1}{2} \in \Theta(n) 
+\end{eqnarray*}
+\end{example}
+
+Passemos agora para um exemplo de algoritmo de ordenação:
+
+\begin{example}
+
+  Como no algoritmo de busca sequêncial, o tempo de processamento da ordenação por inserção não depende apenas do tamanho da entrada, mas da ordem de seus elementos.
+  
+   \begin{codebox}
+     \Procname{$\proc{InsertionSort}(A)$}
+     \li \For $j \gets 2$ até $n$
+     \li \Do $chave \gets a_j$
+     \li    \For $i \gets j-1$ até $1$
+     \li    \Do $a_{i+1} \gets a_i$
+     \li       \If $a_i > chave$
+     \li       \Then sai do laço
+               \End
+            \End
+     \li    $a_{i+1} \gets chave$
+     \End
+   \end{codebox}
+   
+   Vimos que no pior caso o tempo de processamento desse algoritmo é $\Theta(n^2)$.
+   O melhor caso ocorre quando a sequência já está em ordem crescente.
+   Neste caso, sempre entramos na linha 6 na primeira iteração de $i$ e o tempo de processamento das linhas 2 a 6 é $\Theta(1)$ e, portanto, o tempo de processamento do algoritmo todo é $\Theta(n)$.
+   Ou seja, o pior e o melhor caso diferem assintóticamente.
+
+   Para calcular o tempo esperado de processamento assumiremos que todas as permutações de uma sequência de $n$ valores é igualmente provável.
+   Vamos calcular o valor esperado de uma variável aleatória $X$ que mede o número de comparações executadas na linha 5.
+   Nos será útil a variáevl indicadora $I\{a_i$ é comparado com a chave $\}$ que é idêntica a:
+   \begin{displaymath}
+     X_{i,j} = \left\{ \begin{array}{cl}
+                   1 & {\textrm se } a_i \leq a_j\\
+                   0 & {\textrm caso\ contrario}
+                   \end{array}\right.
+   \end{displaymath}   
+
+   Assim temos que:
+   
+   \begin{eqnarray*}
+     E[X] & = & E\left[\sum_{j=2}^n(\sum_{i=1}^{j-1}\{X_{i,j}\}\right] \\
+     & = & \sum_{j=2}^n(\sum_{i=1}^{j-1}E[\{X_{i,j}\}] \\
+     & = & \sum_{j=2}^n(\sum_{i=1}^{j-1}Pr[\{X_{i,j}\}] \\
+   \end{eqnarray*}
+
+   Supondo a distribuição uniforme da ordem dos valores, a chance de $a_j$ ser o k-ésimo menor elemento em $a_1,\dots,a_j$ é igual para todos os $k$s e é $\frac{1}{j}$.
+   Além disso, a comparação ocorre quando $a_j$ está em $a_i, \dots, a_{j-1}$.
+   Assim, temos que $Pr[\{X_{i,j}\}] = \frac{j-i}{j}$.
+
+   \begin{eqnarray*}
+     E[X] & = & \sum_{j=2}^n\left(\sum_{i=1}^{j-1}Pr[\{X_{i,j}\}]\right) \\
+     & = & \sum_{j=2}^n\left(\sum_{i=1}^{j-1}\frac{j-i}{j}\right) \\
+     & = & \sum_{j=2}^n\left(\frac{1}{j}.\sum_{i=1}^{j-1}(j-i)\right) \\
+     & = & \sum_{j=2}^n\left(\frac{1}{j}.\left(j(j-1)-\sum_{i=1}^{j-1}i\right)\right) \\
+     & = & \sum_{j=2}^n\left(\frac{1}{j}.\left(j(j-1)-\frac{j(j-1)}{2}\right)\right) \\
+     & = & \sum_{j=2}^n\left(\frac{j-1}{2}\right) \\
+     & = & \frac{1}{2}\left(\sum_{j=2}^nj - (n-1)\right) \\
+     & = & \frac{1}{2}\left(\frac{n(n+1)}{2} - 1 - n+1\right) \\
+     & = & \frac{n^2 - n}{4} \in \Theta(n^2)
+   \end{eqnarray*}
+   
+\end{example}
+
+
+
 \section{Heap Sort}
